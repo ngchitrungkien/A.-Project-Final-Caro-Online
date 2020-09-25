@@ -83,7 +83,7 @@ class RegisterScreen extends BaseComponent {
                 <br>
                 <button class='btn-register'>REGISTER</button>
                 <br>
-                <a href="3!/login">Already have an account? Log in</a>
+                <a href="#!/login">Already have an account? Log in</a>
             </form>
         </section>
         
