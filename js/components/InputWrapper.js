@@ -10,13 +10,15 @@ const style = /* html */ `
         text-transform: uppercase;
     }
     .input-main {
+        font-size: 20px;
         border: 1px solid #ffffff;
         background: transparent;
         width: 35%;
+        height: 30px;
         justify-content: center;
     }
     .input-error {
-        font-size: 15px;
+        font-size: 20px;
         color: 	#ffbf00;
     }
 

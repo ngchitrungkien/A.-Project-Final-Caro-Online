@@ -119,7 +119,7 @@ class LoginScreen extends BaseComponent {
                 if (response.empty) {
                     alert('Your email or password is not correct!')
                 } else {
-                    alert('Sign in successfully!')
+                    swal("Successfully!", "Welcome to Caro Zone 🐱‍🏍", "success");
                 }
             }
 
