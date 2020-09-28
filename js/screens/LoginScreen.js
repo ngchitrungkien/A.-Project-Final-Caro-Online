@@ -119,7 +119,11 @@ class LoginScreen extends BaseComponent {
                 if (response.empty) {
                     alert('Your email or password is not correct!')
                 } else {
-                    swal("Successfully!", "Welcome to Caro Zone 🐱‍🏍", "success");
+                    swal("Successfully!", "Welcome to Caro Zone 🐱‍🏍", "success")
+                    .then(() => {
+                        window.location.href = "http://127.0.0.1:5500/index.html#!/play";
+                    });
+                    
                 }
             }
 

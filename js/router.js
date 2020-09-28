@@ -14,6 +14,14 @@ window.router.on('/register', function() {
     $app.innerHTML='<register-screen></register-screen>'
 }).resolve();
 
+window.router.on('/play', function() {
+    $app.innerHTML='<play-screen></play-screen>'
+}).resolve();
+
+window.router.on('/main', function() {
+    $app.innerHTML='<main-screen></main-screen>'
+}).resolve();
+
 // window.router.notFound(function(){
 //     $app.innerHTML = 'Không tìm thấy trang này!'
 // });
