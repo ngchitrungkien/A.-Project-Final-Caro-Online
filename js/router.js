@@ -22,6 +22,6 @@ window.router.on('/main', function() {
     $app.innerHTML='<main-screen></main-screen>'
 }).resolve();
 
-// window.router.notFound(function(){
-//     $app.innerHTML = 'Không tìm thấy trang này!'
-// });
+window.router.notFound(function(){
+    $app.innerHTML = 'Không tìm thấy trang này!'
+});
