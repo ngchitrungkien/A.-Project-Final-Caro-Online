@@ -1,6 +1,12 @@
-import {BaseComponent} from '../BaseComponent.js'
-import {validateEmail} from '../utils.js'
-import {MD5} from '../utils.js'
+import {
+    BaseComponent
+} from '../BaseComponent.js'
+import {
+    validateEmail
+} from '../utils.js'
+import {
+    MD5
+} from '../utils.js'
 
 const style = /* html */ `
 <style>
@@ -50,10 +56,10 @@ const style = /* html */ `
 `;
 
 class RegisterScreen extends BaseComponent {
-    constructor(){
+    constructor() {
         super();
 
-        this.state= {
+        this.state = {
             errors: {
                 name: '',
                 email: '',
@@ -68,7 +74,7 @@ class RegisterScreen extends BaseComponent {
             }
         }
     }
-    render(){
+    render() {
         this._shadowRoot.innerHTML = /* html */ `
         ${style}
         
@@ -90,7 +96,7 @@ class RegisterScreen extends BaseComponent {
         `;
 
         this.$formRegister = this._shadowRoot.querySelector('.form-register');
-        this.$formRegister.onsubmit = async (event) => { 
+        this.$formRegister.onsubmit = async (event) => {
             event.preventDefault();
             // Lấy dữ liệu từ các input-wrapper
             let name = this._shadowRoot.querySelector('.name').value;
@@ -102,18 +108,21 @@ class RegisterScreen extends BaseComponent {
             let isPassed = true;
 
             if (name == '') {
+                isPassed = false;
                 this.state.errors.name = 'Input your name!';
             } else {
                 this.state.errors.name = '';
                 this.state.data.name = name;
             }
 
-            if (email == '' || !validateEmail(email)) {
+            if (!email || !validateEmail(email)) {
+                isPassed = false;
                 this.state.errors.email = 'Input your email!';
             } else {
                 this.state.errors.email = '';
                 this.state.data.email = email;
             }
+            
 
             if (password == '') {
                 isPassed = false;
@@ -129,24 +138,25 @@ class RegisterScreen extends BaseComponent {
             } else {
                 this.state.errors.confirmPassword = '';
             }
-            
+
             // Lưu dữ liệu vào firebase
-            if(isPassed) {
+            if (isPassed) {
                 this.state.data.password = MD5(this.state.data.password).toString();
                 // check email trùng
                 let response = await firebase.firestore()
                     .collection('users')
-                    .where('email','==', email)
+                    .where('email', '==', email)
                     .get();
 
                 // thêm 
                 if (response.empty) {
                     await firebase.firestore().collection('users').add(this.state.data);
                     alert('Sign up successfully!');
+                    router.navigate('/login');
                 } else {
                     alert('Your email has already been used!');
                 }
-                
+
             }
 
             this.setState(this.state);
