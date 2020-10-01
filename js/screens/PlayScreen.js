@@ -34,7 +34,7 @@ const style = /* html */ `
         padding: 15em 0 1em;
     }
 
-    .btn-play {
+    form button {
         color: #ffffff;
         font-family: Titillium Web, sans-serif;
         font-size: 30px;
@@ -43,7 +43,7 @@ const style = /* html */ `
         border: 0;
         margin-bottom:15px;
     }
-    .btn-play:hover {
+    form button:hover {
         background-color: #169c81;
         cursor: pointer;
     }
@@ -64,46 +64,66 @@ class PlayScreen extends BaseComponent {
             <form class='form-play'>
                 <h1>Hello, ${currentPlayer.name}</h1>
                 <h1>Your current score is:  ${currentPlayer.score}</h1>
+                <h1 class="status">Your status:  ${currentPlayer.status}</h1>
                 <button type='button' class='btn-play'>Play</button>
-                <button type='button' onclick="router.navigate('#!/login')" class='btn-play'>Log out</button>
+                <button type='button' class='btn-log-out'>Log out</button>
             </form>
         </section>
 
         `;
 
+        this.$logOut = this._shadowRoot.querySelector(".btn-log-out");
         this.$play = this._shadowRoot.querySelector(".btn-play");
+        this.$status = this._shadowRoot.querySelector(".status");
+
+        this.$logOut.onclick = () => {
+            localStorage.removeItem("Current-Player")
+            localStorage.removeItem("Opponent")
+            router.navigate('#!/login')
+        }
+
         this.$play.onclick = async () => {
             await firebase.firestore().collection("versus").add({
                 email: currentPlayer.email,
                 time: new Date().toLocaleString(),
             })
+
+            //doi status player
+            currentPlayer.status = 'waiting for opponent...';
+            localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
+            this.$status.innerHTML = `<h1 class="status">${currentPlayer.status}</h1>`
+            //nen them nut huy o day
         }
 
 
         firebase.firestore().collection('versus').onSnapshot(async (result) => {
-            let opponent;
-            if (result.docs[0].data().email == currentPlayer.email) {
-                //neu player dang dung dau danh sach
-                if (result.docs[1]) {
-                    //luu opponent vao local
-                    localStorage.setItem('Opponent', JSON.stringify(result.docs[1].data()))
-                    // xoa ca 2 ra khoi finding queue 
-                    await firebase.firestore().collection("versus").doc(result.docs[0].id).delete();
-                    await firebase.firestore().collection("versus").doc(result.docs[1].id).delete();
-                } else {
-                    //dang doi nguoi choi khac
-
+            if (currentPlayer.status = 'waiting') {
+                if(result.docs[0]){
+                    if (result.docs[0].data().email == currentPlayer.email) {
+                        //neu 0 la Current Player
+                        if (result.docs[1]) {
+                            //neu co 1 nguoi choi khac dang doi
+                            //luu opponent vao local
+                            localStorage.setItem('Opponent', JSON.stringify(result.docs[1].data()))
+                            // xoa ca 2 ra khoi finding queue 
+                            await firebase.firestore().collection("versus").doc(result.docs[0].id).delete();
+                            await firebase.firestore().collection("versus").doc(result.docs[1].id).delete();
+                        } else {
+                            //NEU NKHONG CO NG KHAC
+                            //thi doi :D 
+                        }
+                    } else {
+                        //neu current player khong phai la [0]
+                        let current = await firebase.firestore().collection('versus').where('email', '==', currentPlayer.email).get();
+                        //cu ghep doi vs thg dau tien !!! :D
+                        //luu thg day vao
+                        localStorage.setItem('Opponent', JSON.stringify(result.docs[0].data()));
+                        //xoa ca 2
+                        await firebase.firestore().collection("versus").doc(result.docs[0].id).delete();
+                        await firebase.firestore().collection("versus").doc(current.docs[0].id).delete();
+                    }
                 }
-            } else {
-                let current = await firebase.firestore().collection('versus').where('email', '==', currentPlayer.email).get();
-                //cu ghep doi vs thg dau tien !!! :D
-                //luu thg day vao
-                localStorage.setItem('Opponent', JSON.stringify(result.docs[0].data()));
-                //xoa ca 2
-                await firebase.firestore().collection("versus").doc(result.docs[0].id).delete();
-                await firebase.firestore().collection("versus").doc(current.docs[0].id).delete();
             }
-
         })
 
 

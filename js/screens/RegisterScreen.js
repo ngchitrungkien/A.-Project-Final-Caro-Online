@@ -72,6 +72,7 @@ class RegisterScreen extends BaseComponent {
                 email: '',
                 password: '',
                 score: 0,
+                status: 'online',
             }
         }
     }
