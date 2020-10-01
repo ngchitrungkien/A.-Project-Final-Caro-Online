@@ -1,6 +1,12 @@
-import {BaseComponent} from '../BaseComponent.js'
-import {validateEmail} from '../utils.js'
-import {MD5} from '../utils.js'
+import {
+    BaseComponent
+} from '../BaseComponent.js'
+import {
+    validateEmail
+} from '../utils.js'
+import {
+    MD5
+} from '../utils.js'
 
 const style = /* html */ `
 <style>
@@ -51,10 +57,10 @@ const style = /* html */ `
 `;
 
 class LoginScreen extends BaseComponent {
-    constructor(){
+    constructor() {
         super();
 
-        this.state= {
+        this.state = {
             errors: {
                 email: '',
                 password: ''
@@ -66,7 +72,7 @@ class LoginScreen extends BaseComponent {
             }
         }
     }
-    render(){
+    render() {
         this._shadowRoot.innerHTML = /* html */ `
         ${style}
        
@@ -84,7 +90,7 @@ class LoginScreen extends BaseComponent {
         `;
 
         this.$formLogin = this._shadowRoot.querySelector('.form-login');
-        this.$formLogin.onsubmit = async (event) => { 
+        this.$formLogin.onsubmit = async (event) => {
             event.preventDefault();
             // Lấy dữ liệu từ các input-wrapper
             let email = this._shadowRoot.querySelector('.email').value;
@@ -94,6 +100,7 @@ class LoginScreen extends BaseComponent {
             let isPassed = true;
 
             if (email == '' || !validateEmail(email)) {
+                isPassed = false;
                 this.state.errors.email = 'Input your email!';
             } else {
                 this.state.errors.email = '';
@@ -119,11 +126,12 @@ class LoginScreen extends BaseComponent {
                 if (response.empty) {
                     alert('Your email or password is not correct!')
                 } else {
+                    let currentPlayer = response.docs[0].data();
+                    localStorage.setItem('Current-Player',JSON.stringify(currentPlayer));
                     swal("Successfully!", "Welcome to Caro Zone 🐱‍🏍", "success")
-                    .then(() => {
-                        router.navigate("#!/play");
-                    });
-                    
+                        .then(() => {
+                            router.navigate("#!/play");
+                        });
                 }
             }
 

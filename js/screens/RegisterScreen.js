@@ -31,7 +31,7 @@ const style = /* html */ `
         background-size: cover;
         width: 100%;
 	    min-height:100%;
-        position: fixed;
+        position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -70,7 +70,8 @@ class RegisterScreen extends BaseComponent {
             data: {
                 name: '',
                 email: '',
-                password: ''
+                password: '',
+                score: 0,
             }
         }
     }
