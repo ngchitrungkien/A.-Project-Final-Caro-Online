@@ -89,7 +89,7 @@ class PlayScreen extends BaseComponent {
             })
 
             //doi status player
-            currentPlayer.status = 'waiting for opponent...';
+            currentPlayer.status = 'waiting';
             localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
             this.$status.innerHTML = `<h1 class="status">${currentPlayer.status}</h1>`
             //nen them nut huy o day
@@ -108,6 +108,7 @@ class PlayScreen extends BaseComponent {
                             // xoa ca 2 ra khoi finding queue 
                             await firebase.firestore().collection("versus").doc(result.docs[0].id).delete();
                             await firebase.firestore().collection("versus").doc(result.docs[1].id).delete();
+                            currentPlayer.status = 'playing';
                         } else {
                             //NEU NKHONG CO NG KHAC
                             //thi doi :D 
@@ -121,6 +122,7 @@ class PlayScreen extends BaseComponent {
                         //xoa ca 2
                         await firebase.firestore().collection("versus").doc(result.docs[0].id).delete();
                         await firebase.firestore().collection("versus").doc(current.docs[0].id).delete();
+                        currentPlayer.status = 'playing';
                     }
                 }
             }
