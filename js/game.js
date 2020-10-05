@@ -268,11 +268,11 @@ function PvsP() {
 
 
 function TimeReturn() {
-	let chb = document.getElementById("chbtime");
-	document.getElementById('chbtime').style.display = "none";
+	let wait = document.getElementById("waitTime");
+	document.getElementById('waitTime').style.display = "none";
 	if (l_played.length > 0)
-		chb.checked = !chb.checked;
-	if (chb.checked) timereturn = true;
+		wait.checked = !wait.checked;
+	if (wait.checked) timereturn = true;
 	else timereturn = false;
 	if (timereturn) LoadProgress();
 }
