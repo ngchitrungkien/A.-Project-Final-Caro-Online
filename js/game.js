@@ -63,9 +63,8 @@ function Click(id) {
 		if (pwin == 0) mess = 'Player with "O" win';
 		swal(mess);
 
-		// Hiển thị lại checkbox timereturn và Button play
+		// Hiển thị lại Button play
 		document.querySelector('.button').style.display = "block";
-		document.getElementById('chbtime').style.display = "block";
 
 		InGame = false;
 	}
@@ -99,6 +98,7 @@ function MouseOut(id) {
 	square.item(pos).style.backgroundColor = "#FFF";
 }
 
+//Update bàn cờ
 function GetBoard() {
 	var TBoard = [];
 	var sqr = document.getElementsByClassName("square");
@@ -288,7 +288,11 @@ function LoadProgress() {
 			else {
 				let mess = 'Player with "X" win';
 				if (CPlayer == 1) mess = 'Player with "O" win';
-				alert(mess);
+				swal(mess);
+
+				// Hiển thị lại Button play
+				document.querySelector('.button').style.display = "block";
+
 				InGame = false;
 			}
 		}, 100);
