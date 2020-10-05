@@ -6,7 +6,7 @@ let CPlayer = 0; // Current Player (0 là O,1 là X)
 let InGame = false;
 let l_played = [], l_win = []; // ô đã đánh, ô win
 let mode = 0; // 0: no block; 1: block
-let timereturn = false; //Đếm time chơi
+let timereturn = false; // Time wait
 
 //New Game
 function Loaded() {
