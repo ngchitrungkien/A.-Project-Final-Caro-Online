@@ -14,6 +14,7 @@ const style = /* html */ `
     }
     h2 {
         color: #ffffff;
+        font-size: 25px;
     }
     img {
         margin-bottom: 50px;
