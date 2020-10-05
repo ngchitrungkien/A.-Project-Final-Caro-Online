@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Caro Zone</title>
+    <meta name="viewport" content="width= device-width,initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="shortcut icon" type="image/png" href="./img/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyAaMI38_1RtnRf1fPRFkdFAivpyxdohJcU",
+            authDomain: "register2-3e200.firebaseapp.com",
+            databaseURL: "https://register2-3e200.firebaseio.com",
+            projectId: "register2-3e200",
+            storageBucket: "register2-3e200.appspot.com",
+            messagingSenderId: "60946027188",
+            appId: "1:60946027188:web:81e863e9e660d1a0843de1"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <script src="//unpkg.com/navigo@6"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script type="text/javascript" src="./js/game.js"></script>
+</head>
+
+<body onLoad="Loaded()" id="bgr">
+    <div class="main-game">
+        <div id="divmain">
+            <table id="table">
+            </table>
+        </div>
+        <div>
+            <div class="user user--1"></div>
+            <br>
+            <div class="user user--2"></div>
+        </div>
+    </div>
+
+    <div id="divcontrol">
+        <div id="label1"><b>CURRENT PLAYER:</b></div>
+        <div id="imgPlayer"></div>
+        <br />
+        <div id="label2"><input type="checkbox" id="chbtime" onClick="TimeReturn()" /><b>TIME:</b></div>
+        <progress id="pgrTime" max="100" value="100"></progress>
+        <time></time>
+        <br />
+        <input type="button" class="button" value="PLAY" onClick="PvsP()" />
+    </div>
+    </div>
+</body>
+
+</html>

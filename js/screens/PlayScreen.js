@@ -12,13 +12,15 @@ const style = /* html */ `
         color: #ffffff;
         font-size: 40px;
     }
+    h2 {
+        color: #ffffff;
+    }
     img {
         margin-bottom: 50px;
         max-width:200px;
     }
 
     .logo{
-        
         display: block;
     }
     .play-screen {
@@ -35,16 +37,18 @@ const style = /* html */ `
     }
 
     form button {
-        color: #ffffff;
+        color: #001427;
         font-family: Titillium Web, sans-serif;
         font-size: 30px;
-        background-color: #1bbc9b;
+        background: #1bbc9b;
         width:200px;
-        border: 0;
+        outline: none;
+        border: none;
+        border-radius: 5px;
         margin-bottom:15px;
     }
     form button:hover {
-        background-color: #169c81;
+        background-color: #007ACC;
         cursor: pointer;
     }
 
@@ -62,9 +66,9 @@ class PlayScreen extends BaseComponent {
             <h1>CARO ZONE</h1>
             <img src="https://lh3.googleusercontent.com/R2NTrDbjejFDmh-ejLbTZyIv5mY6bN3opl1rfVKibNc-AxlCD9h62lE5yrab0p3babg" style="width:30%; height: 30%">
             <form class='form-play'>
-                <h1>Hello, ${currentPlayer.name}</h1>
-                <h1>Your current score is:  ${currentPlayer.score}</h1>
-                <h1 class="status">Your status:  ${currentPlayer.status}</h1>
+                <h2>Hello, ${currentPlayer.name}</h2>
+                <h2>Your current score is:  ${currentPlayer.score}</h2>
+                <h2 class="status">Your status:  ${currentPlayer.status}</h2>
                 <button type='button' class='btn-play'>Play</button>
                 <button type='button' class='btn-log-out'>Log out</button>
             </form>
@@ -91,7 +95,7 @@ class PlayScreen extends BaseComponent {
             //doi status player
             currentPlayer.status = 'waiting';
             localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
-            this.$status.innerHTML = `<h1 class="status">${currentPlayer.status}</h1>`
+            this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
             //nen them nut huy o day
         }
 

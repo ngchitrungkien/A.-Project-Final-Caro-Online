@@ -25,6 +25,9 @@ const style = /* html */ `
     a {
         color: #ffffff
     }
+    a:hover {
+        color: #007acc;
+    }
     .register-screen {
         border: 0;
         background: url(https://images.squarespace-cdn.com/content/v1/52ec28b3e4b0644432d9fd33/1454538036222-JT0VJJKPI23Q2PQ9WHQM/ke17ZwdGBToddI8pDm48kNvT88LknE-K9M4pGNO0Iqd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USOFn4xF8vTWDNAUBm5ducQhX-V3oVjSmr829Rco4W2Uo49ZdOtO_QXox0_W7i2zEA/IMG_0034.JPG?format=1500w) no-repeat center;
@@ -42,14 +45,20 @@ const style = /* html */ `
         color: #ffffff;
         font-family: Titillium Web, sans-serif;
         font-size: 20px;
-        background-color: #1bbc9b;
+        background: #4EFF0B;
+        color: #001427;
+        border: none;
+        border-radius: 5px;
+        outline: none;
         width:100px;
         border: 0;
-        margin-bottom:15px;
+        margin-top: 15px;
+        margin-bottom: 15px;
     }
     .btn-register:hover {
         background-color: #169c81;
         cursor: pointer;
+        
     }
 
 </style>

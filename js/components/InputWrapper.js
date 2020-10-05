@@ -12,14 +12,21 @@ const style = /* html */ `
     .input-main {
         font-size: 20px;
         border: 1px solid #ffffff;
-        background: transparent;
         width: 35%;
         height: 30px;
+        border-radius: 6px;
+        background: transparent;
         justify-content: center;
     }
     .input-error {
         font-size: 20px;
         color: 	#ffbf00;
+    }
+
+    .input-label:focus, .input-main:focus, .input-error:focus {
+        background: #607a94;
+        color: #001427;
+        outline: none;
     }
 
 </style>
