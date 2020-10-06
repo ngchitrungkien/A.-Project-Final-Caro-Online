@@ -8,19 +8,22 @@ const style = /* html */ `
     }
     .input-label {
         text-transform: uppercase;
+        padding: 5px;
     }
     .input-main {
         font-size: 20px;
         border: 1px solid #ffffff;
         width: 35%;
         height: 30px;
+        margin-top: 4px;
         border-radius: 6px;
         background: transparent;
         justify-content: center;
     }
     .input-error {
-        font-size: 20px;
-        color: 	#ffbf00;
+        font-size: 14px;
+        padding: 3px;
+        color: 	#4EFF0B;;
     }
 
     .input-label:focus, .input-main:focus, .input-error:focus {

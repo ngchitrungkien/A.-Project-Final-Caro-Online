@@ -56,7 +56,7 @@ const style = /* html */ `
         margin-bottom: 15px;
     }
     .btn-register:hover {
-        background-color: #169c81;
+        background-color: #607a94;
         cursor: pointer;
         
     }
