@@ -88,7 +88,7 @@ function MouseOver(id) {
 	if (!InGame) return;
 	let square = document.getElementsByClassName("square");
 	let pos = parseInt(id);
-	square.item(pos).style.backgroundColor = "#3F3";
+	square.item(pos).style.backgroundColor = "#4EFF0B";
 }
 
 function MouseOut(id) {
