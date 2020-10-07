@@ -99,51 +99,50 @@ class PlayScreen extends BaseComponent {
             localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
             //nen them nut huy o day
         }
-       
-        
-        
-        
-        firebase.firestore().collection('hello').onSnapshot((result)=>{
+
+
+
+
+        firebase.firestore().collection('hello').onSnapshot((result) => {
             //player an tim kiem, email co trong 'hello'
             //mot player khac bam tim kiem, tuong tu
             //chi xet 2 player dau tien
-            //ghep cap 2 player dau tien, xoa dan chung ra khoi hang doi 'hello'
-            if(result.docs[0]){
-                if(result.docs[1]){
-                    //neu ton tai nguoi choi [1]
-                    //neu current player la [0]
-                    if(result.docs[0].data().email==currentPlayer.email){
-                        //doi thu cua a ta se la nguoi choi so 1
-                        localStorage.setItem('Opponent',JSON.stringify(result.docs[1].data()));
-                        //status cua current player se la playing - demo
-                        
-                    } else if (result.docs[1].data().email==currentPlayer.email){
-                        //neu current player là [1]
-                        //doi thu cua a ta se la nguoi choi so 0
-                        localStorage.setItem('Opponent',JSON.stringify(result.docs[0].data()));
-                        
+            //ghep cap 2 player dau tien, xoa dan chung ra khoi hang doi
+            if (currentPlayer.status == 'waiting') {
+                if (result.docs[0]) {
+                    if (result.docs[1]) {
+                        //neu ton tai nguoi choi [1]
+                        //neu current player la [0]
+                        if (result.docs[0].data().email == currentPlayer.email) {
+                            //doi thu cua a ta se la nguoi choi so 1
+
+                            localStorage.setItem('Opponent', JSON.stringify(result.docs[1].data()));
+                            //status cua current player se la playing - demo
+                            currentPlayer.status = 'playing';
+                            this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
+                            localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
+                        } else if (result.docs[1].data().email == currentPlayer.email) {
+                            //neu current player là [1]
+                            //doi thu cua a ta se la nguoi choi so 0
+
+                            localStorage.setItem('Opponent', JSON.stringify(result.docs[0].data()));
+                            currentPlayer.status = 'playing';
+                            this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
+                            localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
+                        }
+
                     }
-                    
                 }
             }
 
-            if(localStorage.getItem('Opponent')){
-                currentPlayer.status = 'playing';
-                this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
-            }
 
-          
-
-
-
-            
-            // if(result.docs[1]){
-            //     currentPlayer.status = "playing";
+            // if (localStorage.getItem('Opponent')) {
+            //     currentPlayer.status = 'playing';
+            //     this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
             // }
-            // this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
         })
-     
-       
+
+
 
 
     }

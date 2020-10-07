@@ -6,3 +6,5 @@ export function validateEmail(email) {
 export function MD5(string) {
     return CryptoJS.MD5(string).toString();
 }
+
+
