@@ -103,65 +103,119 @@ class PlayScreen extends BaseComponent {
 
         firebase.firestore().collection('queue').onSnapshot(async (result) => {
             //t tứk á :(((((
-        })
-
-
-        //kich ban 2:
-        // moi 2s lai get db 1 lan, db asc theo tg
-        //xoa 0 va 1
-        //ngung reload
-        setInterval(async () => {
-            let result = await firebase.firestore().collection("queue").orderBy("time", "asc").get();
-            if (currentPlayer.status == 'waiting') {
-                //player an tim kiem, email co trong 'queue'
-                //mot player khac bam tim kiem, tuong tu
-                //chi xet 2 player dau tien
-                //ghep cap 2 player dau tien, xoa dan chung ra khoi hang doi, cac player khac se dc day len sau
+            if (currentPlayer.status = 'waiting') {
                 if (result.docs[0]) {
                     if (result.docs[1]) {
-                        //neu ton tai nguoi choi [1]
-                        //neu current player la [0]
                         if (result.docs[0].data().email == currentPlayer.email) {
-                            //doi thu cua a ta se la nguoi choi so 1
-                            localStorage.setItem('Opponent', JSON.stringify(result.docs[1].data()));
-                            //status cua current player se la playing - demo
-                            currentPlayer.status = 'playing';
-                            this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
-                            localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
-                            clearInterval()
-                            // console.log(0);
-                        } else if (result.docs[1].data().email == currentPlayer.email) {
-                            //neu current player là [1]
-                            //doi thu cua a ta se la nguoi choi so 0
 
-                            localStorage.setItem('Opponent', JSON.stringify(result.docs[0].data()));
+                            localStorage.setItem('Opponent', JSON.stringify(result.docs[1].data()));
+
                             currentPlayer.status = 'playing';
                             this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
+
                             localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
-                            clearInterval();
-                            // console.log(1);
+
+                            await firebase.firestore().collection('queue').doc(result.docs[0].id).delete();
+
+                        } else if (result.docs[1].data().email == currentPlayer.email) {
+                            localStorage.setItem('Opponent', JSON.stringify(result.docs[0].data()));
+
+                            currentPlayer.status = 'playing';
+                            this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
+
+
+                            localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
+
+                            await firebase.firestore().collection('queue').doc(result.docs[1].id).delete();
                         }
                         
-
+                    }
+                    if(localStorage.getItem('Opponent')){
+                        currentPlayer.status = 'playing';
+                        this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
+                        await firebase.firestore().collection('queue').doc(result.docs[0].id).delete();
                     }
                 }
             }
-        }, 2000);
+        })
+
+
+        {
+            //      //kich ban 2:
+            // // moi 2s lai get db 1 lan, db asc theo tg
+            // //xoa 0 va 1
+            // //ngung reload
+            // setInterval(async () => {
+            //     let result = await firebase.firestore().collection("queue").orderBy("time", "asc").get();
+            //     if (currentPlayer.status == 'waiting') {
+            //         //player an tim kiem, email co trong 'queue'
+            //         //mot player khac bam tim kiem, tuong tu
+            //         //chi xet 2 player dau tien
+            //         //ghep cap 2 player dau tien, xoa dan chung ra khoi hang doi, cac player khac se dc day len sau
+            //         if (result.docs[0])
+
+            //             //neu ton tai nguoi choi [1]
+            //             //neu current player la [0]
+            //             if (result.docs[0].data().email == currentPlayer.email) {
+            //                 //doi thu cua a ta se la nguoi choi so 1
+            //                 localStorage.setItem('Opponent', JSON.stringify(result.docs[1].data()));
+            //                 //status cua current player se la playing - demo
+            //                 currentPlayer.status = 'playing';
+            //                 this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
+            //                 localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
+            //                 clearInterval()
+
+            //                 (async () => {
+            //                     let result = await firebase.firestore().collection("queue").where("email", "==", currentPlayer.email).get();
+            //                     await firebase.firestore().collection("queue").doc(result.docs[0].id).delete();
+            //                 })();
+
+            //                 router.navigate('#!/login');
+            //                 // console.log(0);
+
+            //             } else if (result.docs[1].data().email == currentPlayer.email) {
+            //             //neu current player là [1]
+            //             //doi thu cua a ta se la nguoi choi so 0
+
+            //             localStorage.setItem('Opponent', JSON.stringify(result.docs[0].data()));
+            //             currentPlayer.status = 'playing';
+            //             this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
+            //             localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
+            //             clearInterval();
+
+
+
+            //             (async () => {
+            //                 let result = await firebase.firestore().collection("queue").where("email", "==", currentPlayer.email).get();
+            //                 await firebase.firestore().collection("queue").doc(result.docs[0].id).delete();
+            //             })();
+
+            //             router.navigate('#!/login');
+            //             // console.log(1);
+
+            //         }
+
+
+
+
+            //     }
+
+
+            // }, 2000);
+        }
+
 
 
         //navigoooo!, xoa du lieu trong hang cho 
-        if(currentPlayer.status == 'playing'){
-            (async ()=>{
-                let result = await firebase.firestore().collection("queue").where("email","==",currentPlayer.email).get();
-               await firebase.firestore().collection("queue").doc(result.docs[0].id).delete();
-            })()
-            setTimeout(async ()=>{
-                
-                router.navigate('#!/login');
-            },3000);
-                
-           
-        }
+        // if (currentPlayer.status == 'playing') {
+        //     // (async ()=>{
+        //     //     let result = await firebase.firestore().collection("queue").where("email","==",currentPlayer.email).get();
+        //     //    await firebase.firestore().collection("queue").doc(result.docs[0].id).delete();  
+        //     // })();
+        //     setTimeout(() => {
+        //         router.navigate('#!/login');
+        //     }, 3000);
+        // }
     }
 }
 
