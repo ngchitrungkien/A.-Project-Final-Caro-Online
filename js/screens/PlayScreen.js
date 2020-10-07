@@ -69,7 +69,7 @@ class PlayScreen extends BaseComponent {
             <form class='form-play'>
                 <h2>Hello, ${currentPlayer.name}</h2>
                 <h2>Your current score is:  ${currentPlayer.score}</h2>
-                <h2 class="status">Your status:  ${currentPlayer.status}</h2>
+                <h2 class="status">Status:  ${currentPlayer.status}</h2>
                 <button type='button' class='btn-play'>Play</button>
                 <button type='button' class='btn-log-out'>Log out</button>
             </form>
@@ -88,7 +88,7 @@ class PlayScreen extends BaseComponent {
         }
 
         this.$play.onclick = async () => {
-            await firebase.firestore().collection('hello').add({
+            await firebase.firestore().collection('queue').add({
                 email: currentPlayer.email,
                 time: new Date().toLocaleString(),
             })
@@ -101,26 +101,22 @@ class PlayScreen extends BaseComponent {
         }
 
 
-        firebase.firestore().collection('hello').onSnapshot(async (result) => {
-           
+        firebase.firestore().collection('queue').onSnapshot(async (result) => {
+            //t tứk á :(((((
         })
-        // if (localStorage.getItem('Opponent')) {
-        //     currentPlayer.status = 'playing';
-        //     this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
-        // }
 
 
         //kich ban 2:
         // moi 2s lai get db 1 lan, db asc theo tg
         //xoa 0 va 1
         //ngung reload
-        setInterval(async ()=>{
-            let result = await firebase.firestore().collection("hello").orderBy("time", "asc").get();
+        setInterval(async () => {
+            let result = await firebase.firestore().collection("queue").orderBy("time", "asc").get();
             if (currentPlayer.status == 'waiting') {
-                //player an tim kiem, email co trong 'hello'
+                //player an tim kiem, email co trong 'queue'
                 //mot player khac bam tim kiem, tuong tu
                 //chi xet 2 player dau tien
-                //ghep cap 2 player dau tien, xoa dan chung ra khoi hang doi
+                //ghep cap 2 player dau tien, xoa dan chung ra khoi hang doi, cac player khac se dc day len sau
                 if (result.docs[0]) {
                     if (result.docs[1]) {
                         //neu ton tai nguoi choi [1]
@@ -145,17 +141,27 @@ class PlayScreen extends BaseComponent {
                             clearInterval();
                             // console.log(1);
                         }
+                        
 
                     }
                 }
             }
-        },2000);
+        }, 2000);
 
 
-
-
-
-
+        //navigoooo!, xoa du lieu trong hang cho 
+        if(currentPlayer.status == 'playing'){
+            (async ()=>{
+                let result = await firebase.firestore().collection("queue").where("email","==",currentPlayer.email).get();
+               await firebase.firestore().collection("queue").doc(result.docs[0].id).delete();
+            })()
+            setTimeout(async ()=>{
+                
+                router.navigate('#!/login');
+            },3000);
+                
+           
+        }
     }
 }
 
