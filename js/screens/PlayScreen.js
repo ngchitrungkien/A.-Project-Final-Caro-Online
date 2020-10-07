@@ -88,48 +88,62 @@ class PlayScreen extends BaseComponent {
         }
 
         this.$play.onclick = async () => {
-            await firebase.firestore().collection("versus").add({
+            await firebase.firestore().collection('hello').add({
                 email: currentPlayer.email,
                 time: new Date().toLocaleString(),
             })
 
             //doi status player
-            currentPlayer.status = 'waiting for opponent...';
-            localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
+            currentPlayer.status = 'waiting';
             this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
+            localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
             //nen them nut huy o day
         }
-
-
-        firebase.firestore().collection('versus').onSnapshot(async (result) => {
-            if (currentPlayer.status = 'waiting') {
-                if(result.docs[0]){
-                    if (result.docs[0].data().email == currentPlayer.email) {
-                        //neu 0 la Current Player
-                        if (result.docs[1]) {
-                            //neu co 1 nguoi choi khac dang doi
-                            //luu opponent vao local
-                            localStorage.setItem('Opponent', JSON.stringify(result.docs[1].data()))
-                            // xoa ca 2 ra khoi finding queue 
-                            await firebase.firestore().collection("versus").doc(result.docs[0].id).delete();
-                            await firebase.firestore().collection("versus").doc(result.docs[1].id).delete();
-                        } else {
-                            //NEU NKHONG CO NG KHAC
-                            //thi doi :D 
-                        }
-                    } else {
-                        //neu current player khong phai la [0]
-                        let current = await firebase.firestore().collection('versus').where('email', '==', currentPlayer.email).get();
-                        //cu ghep doi vs thg dau tien !!! :D
-                        //luu thg day vao
-                        localStorage.setItem('Opponent', JSON.stringify(result.docs[0].data()));
-                        //xoa ca 2
-                        await firebase.firestore().collection("versus").doc(result.docs[0].id).delete();
-                        await firebase.firestore().collection("versus").doc(current.docs[0].id).delete();
+       
+        
+        
+        
+        firebase.firestore().collection('hello').onSnapshot((result)=>{
+            //player an tim kiem, email co trong 'hello'
+            //mot player khac bam tim kiem, tuong tu
+            //chi xet 2 player dau tien
+            //ghep cap 2 player dau tien, xoa dan chung ra khoi hang doi 'hello'
+            if(result.docs[0]){
+                if(result.docs[1]){
+                    //neu ton tai nguoi choi [1]
+                    //neu current player la [0]
+                    if(result.docs[0].data().email==currentPlayer.email){
+                        //doi thu cua a ta se la nguoi choi so 1
+                        localStorage.setItem('Opponent',JSON.stringify(result.docs[1].data()));
+                        //status cua current player se la playing - demo
+                        
+                    } else if (result.docs[1].data().email==currentPlayer.email){
+                        //neu current player là [1]
+                        //doi thu cua a ta se la nguoi choi so 0
+                        localStorage.setItem('Opponent',JSON.stringify(result.docs[0].data()));
+                        
                     }
+                    
                 }
             }
+
+            if(localStorage.getItem('Opponent')){
+                currentPlayer.status = 'playing';
+                this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
+            }
+
+          
+
+
+
+            
+            // if(result.docs[1]){
+            //     currentPlayer.status = "playing";
+            // }
+            // this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
         })
+     
+       
 
 
     }
