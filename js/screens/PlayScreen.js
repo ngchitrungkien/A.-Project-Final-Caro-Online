@@ -74,7 +74,7 @@ class PlayScreen extends BaseComponent {
                 <button type='button' class='btn-log-out'>Log out</button>
             </form>
         </section>
-
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         `;
 
         this.$logOut = this._shadowRoot.querySelector(".btn-log-out");
@@ -111,29 +111,61 @@ class PlayScreen extends BaseComponent {
                             localStorage.setItem('Opponent', JSON.stringify(result.docs[1].data()));
 
                             currentPlayer.status = 'playing';
-                            this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
+                            this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`;
 
                             localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
 
                             await firebase.firestore().collection('queue').doc(result.docs[0].id).delete();
 
+                            swal(
+                                'Good job!',
+                                'You clicked the button!',
+                                'success'
+                            ).then(()=>{
+                                setTimeout(()=>{
+                                    router.navigate('google.com')
+                                },3000)
+                            });
+
+                            
+
                         } else if (result.docs[1].data().email == currentPlayer.email) {
                             localStorage.setItem('Opponent', JSON.stringify(result.docs[0].data()));
 
                             currentPlayer.status = 'playing';
-                            this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
+                            this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`;
 
 
                             localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
 
                             await firebase.firestore().collection('queue').doc(result.docs[1].id).delete();
+
+                            swal(
+                                'Good job!',
+                                'You clicked the button!',
+                                'success'
+                            ).then(()=>{
+                                setTimeout(()=>{
+                                    router.navigate('google.com')
+                                },3000)
+                            });
+
                         }
-                        
+
                     }
-                    if(localStorage.getItem('Opponent')){
+                    if (localStorage.getItem('Opponent')) {
                         currentPlayer.status = 'playing';
                         this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
                         await firebase.firestore().collection('queue').doc(result.docs[0].id).delete();
+                        swal(
+                            'Good job!',
+                            'You clicked the button!',
+                            'success'
+                        ).then(()=>{
+                            setTimeout(()=>{
+                                router.navigate('google.com')
+                            },3000)
+                        });
                     }
                 }
             }
