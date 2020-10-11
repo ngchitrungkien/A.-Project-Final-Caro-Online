@@ -236,7 +236,6 @@ class PlayScreen extends BaseComponent {
         this.$play.onclick = async () => {
             //doi status player
 
-<<<<<<< HEAD
             if (currentPlayer.status == `online`) {
                 await firebase.firestore().collection('queue').add({
                     email: currentPlayer.email,
@@ -277,87 +276,6 @@ class PlayScreen extends BaseComponent {
                     currentPlayer.status='playing';
                     this.$status.innerHTML = `${currentPlayer.status}`;
                     localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
-=======
-        this.$ranking.onclick = () => {
-            var x = this._shadowRoot.querySelector('.play-screen');
-            if (x.style.display === 'none') {
-                x.style.display = 'block';
-            } else {
-                x.style.display = 'none';
-            }
-        };
-
-        this.$back.onclick = () => {
-            this._shadowRoot.querySelector('.play-screen').style.display = 'block'
-        }
-
-        firebase.firestore().collection('queue').onSnapshot(async (result) => {
-            //t tứk á :(((((
-            if (currentPlayer.status = 'waiting') {
-                if (result.docs[0]) {
-                    if (result.docs[1]) {
-                        if (result.docs[0].data().email == currentPlayer.email) {
-
-                            localStorage.setItem('Opponent', JSON.stringify(result.docs[1].data()));
-
-                            currentPlayer.status = 'playing';
-                            this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`;
-
-                            localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
-
-                            await firebase.firestore().collection('queue').doc(result.docs[0].id).delete();
-
-                            swal(
-                                'Good job!',
-                                'You clicked the button!',
-                                'success'
-                            ).then(() => {
-                                setTimeout(() => {
-                                    router.navigate('google.com')
-                                }, 3000)
-                            });
-
-
-
-                        } else if (result.docs[1].data().email == currentPlayer.email) {
-                            localStorage.setItem('Opponent', JSON.stringify(result.docs[0].data()));
-
-                            currentPlayer.status = 'playing';
-                            this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`;
-
-
-                            localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
-
-                            await firebase.firestore().collection('queue').doc(result.docs[1].id).delete();
-
-                            swal(
-                                'Good job!',
-                                'You clicked the button!',
-                                'success'
-                            ).then(() => {
-                                setTimeout(() => {
-                                    router.navigate('google.com')
-                                }, 3000)
-                            });
-
-                        }
-
-                    }
-                    if (localStorage.getItem('Opponent')) {
-                        currentPlayer.status = 'playing';
-                        this.$status.innerHTML = `<h2 class="status">${currentPlayer.status}</h2>`
-                        await firebase.firestore().collection('queue').doc(result.docs[0].id).delete();
-                        swal(
-                            'Good job!',
-                            'You clicked the button!',
-                            'success'
-                        ).then(() => {
-                            setTimeout(() => {
-                                router.navigate('google.com')
-                            }, 3000)
-                        });
-                    }
->>>>>>> 6b74648a290994f7eb960ff2892ca71c8215f9b0
                 }
                 // await firebase.firestore().collection('queue').doc(queue.docs[1].id).delete();
                 // await firebase.firestore().collection('queue').doc(queue.docs[0].id).delete();
