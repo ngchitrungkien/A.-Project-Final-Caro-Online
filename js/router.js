@@ -24,4 +24,14 @@ window.router.on('/main', function() {
 
 window.router.notFound(function(){
     $app.innerHTML = 'Không tìm thấy trang này!'
+    if(localStorage.getItem("Current-Player")){
+        setTimeout(() => {
+            router.navigate("play")
+        }, 2000);
+    } else {
+        setTimeout(() => {
+            router.navigate("login")
+        }, 2000);
+    }
+    
 });

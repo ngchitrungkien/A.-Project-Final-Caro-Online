@@ -104,6 +104,8 @@ class LoginScreen extends BaseComponent {
         this.$formLogin = this._shadowRoot.querySelector('.form-login');
         this.$formLogin.onsubmit = async (event) => {
             event.preventDefault();
+            //xóa dữ liệu của lần trước
+            localStorage.clear();
             // Lấy dữ liệu từ các input-wrapper
             let email = this._shadowRoot.querySelector('.email').value;
             let password = this._shadowRoot.querySelector('.password').value;
