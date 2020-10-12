@@ -7,7 +7,7 @@ let InGame = false;
 let l_played = [], l_win = []; // ô đã đánh, ô win
 let mode = 0; // 0: no block; 1: block
 let timereturn = false; // Time wait
-
+let db = firebase.firestore();
 //New Game
 function Loaded() {
 	CPlayer = 0; // Current Player (0 is O,1 is X)
@@ -44,6 +44,7 @@ function Click(id) {
 	square.item(pos).style.backgroundImage = path;
 	square.item(pos).setAttribute("player", CPlayer.toString());
 	l_played.push(pos);
+	console.log(l_played);
 
 	let win = WinGame();
 	let pwin = CPlayer;
@@ -73,6 +74,7 @@ function Click(id) {
 		pgr.value = pgr.getAttribute("max");
 	}
 }
+db.collection('update-game').onSnapshot(Click(id));
 
 // Min Max
 function maxab(a, b) {
@@ -104,6 +106,7 @@ function GetBoard() {
 	var sqr = document.getElementsByClassName("square");
 	for (i = 0; i < size * size; i++)
 		TBoard.push(parseInt(sqr.item(i).getAttribute("player")));
+		console.log(TBoard);
 
 	return TBoard;
 }
@@ -297,3 +300,8 @@ function LoadProgress() {
 			}
 		}, 100);
 }
+
+// Lấy dữ liệu 2 ng chơi
+document.getElementById('user-1').innerHTML = JSON.parse(localStorage.getItem('Current-Player')).email;
+document.getElementById('user-2').innerHTML = JSON.parse(localStorage.getItem('Opponent')).email;
+console.log(JSON.parse(localStorage.getItem('Current-Player')).email);
