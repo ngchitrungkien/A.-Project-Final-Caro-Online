@@ -7,4 +7,20 @@ export function MD5(string) {
     return CryptoJS.MD5(string).toString();
 }
 
+// trả về 1 mảng gồm nhiều object
+export function getDataFromDocs(docs) {
+    let data = [];
 
+    docs.forEach(function(doc){
+        data.push(getDataFromDoc(doc));
+    });
+
+    return data;
+}
+
+// trả về 1 object
+export function getDataFromDoc(doc) {
+    let data = doc.data();
+    data.id = doc.id;
+    return data;
+}
