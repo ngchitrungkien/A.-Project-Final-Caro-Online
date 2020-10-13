@@ -1,6 +1,7 @@
 import {
     BaseComponent
 } from '../BaseComponent.js'
+import {getDataFromDocs} from './../utils.js'
 
 const style = /* html */ `
 <style>
@@ -123,8 +124,15 @@ const style = /* html */ `
 `;
 
 class PlayScreen extends BaseComponent {
-
+        constructor(props){
+            super();
+            this.state = {
+                rank:[]
+            }
+        }
     render() {
+
+        console.log(this.state.rank)
         let currentPlayer = JSON.parse(localStorage.getItem('Current-Player'));
         this._shadowRoot.innerHTML = /* html */ `
         ${style}
@@ -154,59 +162,59 @@ class PlayScreen extends BaseComponent {
                         <tr>
                             <th>Rank</th>
                             <th>Name</th>
-                            <th>Points</th>
+                            <th>Score</th>
                         </tr>
                     </thead>
                 <tbody>
                 <tr>
                     <td class="rank">1</td>
                     <td class="name"></td>
-                    <td class="points"></td>
+                    <td class="score"></td>
                 </tr>
                         <tr>
                     <td class="rank">2</td>
                     <td class="name"></td>
-                    <td class="points"></td>
+                    <td class="score"></td>
                 </tr>
                     <tr>
                     <td class="rank">3</td>
                     <td class="name"></td>
-                    <td class="points"></td>
+                    <td class="score"></td>
                 </tr>
                     <tr>
                     <td class="rank">4</td>
                     <td class="name"></td>
-                    <td class="points"></td>
+                    <td class="score"></td>
                 </tr>
                     <tr>
                     <td class="rank">5</td>
                     <td class="name"></td>
-                    <td class="points"></td>
+                    <td class="score"></td>
                 </tr>
                     <tr>
                     <td class="rank">6</td>
                     <td class="name"></td>
-                    <td class="points"></td>
+                    <td class="score"></td>
                 </tr>
                     <tr>
                     <td class="rank">7</td>
                     <td class="name"></td>
-                    <td class="points"></td>
+                    <td class="score"></td>
                 </tr>
                     <tr>
                     <td class="rank">8</td>
                     <td class="name"></td>
-                    <td class="points"></td>
+                    <td class="score"></td>
                 </tr>
                     <tr>
                     <td class="rank">9</td>
                     <td class="name"></td>
-                    <td class="points"></td>
+                    <td class="score"></td>
                 </tr>
                 <tr>
                     <td class="rank">10</td>
                     <td class="name"></td>
-                    <td class="points"></td>
+                    <td class="score"></td>
                 </tr>
                 </tbody>
                 </table>
@@ -302,7 +310,16 @@ class PlayScreen extends BaseComponent {
                 }
             }
         )
+        
+        let sort = async () => {
 
+            var score1 = await firebase.firestore().collection('users').orderBy('score','desc').limit(10).get();
+            this.setState({
+                rank: getDataFromDocs(score1.docs)
+            })
+            
+        }
+        
 
     }
 
