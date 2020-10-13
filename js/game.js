@@ -18,14 +18,14 @@ let x = Math.floor(Math.random() * arrPlayer.length);
 if (CurrentUser) {
 	localStorage.setItem('player', arrPlayer[x]);
 	arrPlayer.splice(x, 1);
+}
 
-	if (CurrentPlayer == 'player1') {
-		document.getElementById('user1').innerHTML = CurrentUser + " " + "with O";
-		document.getElementById('user2').innerHTML = OpponentUser + " " + "with X";
-	} else if (CurrentPlayer == 'player2') {
-		document.getElementById('user1').innerHTML = CurrentUser + " " + "with X";
-		document.getElementById('user2').innerHTML = OpponentUser + " " + "with O";
-	}
+if (CurrentPlayer == 'player1') {
+	document.getElementById('user1').innerHTML = CurrentUser + " " + "with O";
+	document.getElementById('user2').innerHTML = OpponentUser + " " + "with X";
+} else if (CurrentPlayer == 'player2') {
+	document.getElementById('user1').innerHTML = CurrentUser + " " + "with X";
+	document.getElementById('user2').innerHTML = OpponentUser + " " + "with O";
 }
 
 function Loaded() {
