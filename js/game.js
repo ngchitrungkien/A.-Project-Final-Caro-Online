@@ -1,5 +1,4 @@
 // Khởi tạo các biến thành phần
-var Currentplayer = localStorage.getItem('email')
 const size = 16; // size của bàn cờ
 const countMax = 5; // check biến số để win
 let CPlayer = 0; // Current Player (0 là O,1 là X)
@@ -7,8 +6,28 @@ let InGame = false;
 let l_played = [], l_win = []; // ô đã đánh, ô win
 let mode = 0; // 0: no block; 1: block
 let timereturn = false; // Time wait
+let CurrentUser = JSON.parse(localStorage.getItem('Current-Player')).email;
+let OpponentUser = localStorage.getItem('Opponent');
+let CurrentPlayer = localStorage.getItem('player');
 let db = firebase.firestore();
 //New Game
+
+// Set thứ tự player cho mỗi CurrentUser, player1 ứng với CPlayer = 0 được chơi trước.
+let arrPlayer = ['player1', 'player2'];
+let x = Math.floor(Math.random() * arrPlayer.length);
+if (CurrentUser) {
+	localStorage.setItem('player', arrPlayer[x]);
+	arrPlayer.splice(x, 1);
+
+	if (CurrentPlayer == 'player1') {
+		document.getElementById('user1').innerHTML = CurrentUser + " " + "with O";
+		document.getElementById('user2').innerHTML = OpponentUser + " " + "with X";
+	} else if (CurrentPlayer == 'player2') {
+		document.getElementById('user1').innerHTML = CurrentUser + " " + "with X";
+		document.getElementById('user2').innerHTML = OpponentUser + " " + "with O";
+	}
+}
+
 function Loaded() {
 	CPlayer = 0; // Current Player (0 is O,1 is X)
 	l_played = [], l_win = [];
@@ -35,7 +54,7 @@ function Loaded() {
 
 //Play Game
 
-let updateClick =  db.collection('test').doc('test');
+let updateClick = db.collection('test').doc('test');
 
 
 function Click(id) {
@@ -58,11 +77,19 @@ function Click(id) {
 	let pwin = CPlayer;
 
 
-	if (CPlayer == 0) CPlayer = 1; 
-	else {
-		CPlayer = 0;
-	}
-	
+	if (CPlayer == 0) CPlayer = 1;
+	else CPlayer = 0;
+
+
+	// Khoá lượt click của Player
+	if (CurrentPlayer == 'player1' && CPlayer == 1) {
+		document.getElementById('table').style.pointerEvents = 'none';
+	} else if (CurrentPlayer == 'player2' && CPlayer == 0) {
+		document.getElementById('table').style.pointerEvents = 'none';
+	} else if (CurrentPlayer == 'player2' && l_played.length == 0) {
+		document.getElementById('table').style.pointerEvents = 'none'; // Chặn player 2 đánh lượt đầu.
+	} else document.getElementById('table').style.pointerEvents = 'auto';
+
 
 	let iplayer = "url('img/Opng.png')";
 	if (CPlayer == 1) iplayer = "url('img/Xpng.png')";
@@ -87,12 +114,14 @@ function Click(id) {
 }
 
 // Reload lại bàn cờ từ firebase
-	
+
 async function reload() {
 	let result = await db.collection('test').doc('test').get()
 	let x = result.data().l_play;
-	for(item of x){
-		Click(item);	
+	console.log(x);
+
+	for (let item of x) {
+		Click(item);
 	}
 }
 
@@ -132,9 +161,9 @@ function GetBoard() {
 	var TBoard = [];
 	var sqr = document.getElementsByClassName("square");
 	for (i = 0; i < size * size; i++)
-	TBoard.push(parseInt(sqr.item(i).getAttribute("player")));
+		TBoard.push(parseInt(sqr.item(i).getAttribute("player")));
 	console.log(TBoard);
-	
+
 	return TBoard;
 }
 
@@ -145,7 +174,7 @@ function WinGame() {
 		for (y = 0; y < size; y++) {
 			if (winHor(x, y, Board) || winVer(x, y, Board) || winCross1(x, y, Board)
 				|| winCross2(x, y, Board)) {
-					let square = document.getElementsByClassName("square");
+				let square = document.getElementsByClassName("square");
 				for (i = 0; i < l_win.length; i++) {
 					square.item(l_win[i]).style.backgroundColor = "#FF0";
 				}
@@ -164,7 +193,7 @@ function winHor(x, y, Board) {
 	let count = 0, countO = 0;// count opponent
 	let player = Board[x + y * size];
 	if (player == -1) return false;
-	
+
 	if (x > 0) {
 		let p = Board[x - 1 + y * size];
 		if (p != player && p != -1) countO++;
@@ -181,9 +210,9 @@ function winHor(x, y, Board) {
 	if (count >= countMax) {
 		if (mode == 0)
 			return true;
-			else {
-				if (countO >= 2) return false;
-				else return true;
+		else {
+			if (countO >= 2) return false;
+			else return true;
 		}
 	}
 	return false;
@@ -195,12 +224,12 @@ function winVer(x, y, Board) {
 	let count = 0, countO = 0;
 	let player = Board[x + y * size];
 	if (player == -1) return false;
-	
+
 	if (y > 0) {
 		let p = Board[x + (y - 1) * size];
 		if (p != player && p != -1) countO++;
 	}
-	
+
 	for (i = y; i < size; i++) {
 		let p = Board[x + i * size];
 		if (p == player && p != -1) {
@@ -211,7 +240,7 @@ function winVer(x, y, Board) {
 	}
 	if (count >= countMax) {
 		if (mode == 0)
-		return true;
+			return true;
 		else {
 			if (countO >= 2) return false;
 			else return true;
@@ -244,7 +273,7 @@ function winCross1(x, y, Board) {
 	if (count >= countMax) {
 		if (mode == 0)
 			return true;
-			else {
+		else {
 			if (countO >= 2) return false;
 			else return true;
 		}
@@ -264,7 +293,7 @@ function winCross2(x, y, Board) {
 		let p = Board[x - 1 + (y - 1) * size];
 		if (p != player && p != -1) countO++;
 	}
-	
+
 	for (i = 0; i < minab(size - x, size - y); i++) {
 		let p = Board[(x + i) + (y + i) * size];
 		if (p == player && p != -1) {
@@ -276,8 +305,8 @@ function winCross2(x, y, Board) {
 	if (count >= countMax) {
 		if (mode == 0)
 			return true;
-			else {
-				if (countO >= 2) return false;
+		else {
+			if (countO >= 2) return false;
 			else return true;
 		}
 	}
@@ -292,7 +321,7 @@ function PvsP() {
 	pgr.value = pgr.getAttribute("max");
 	document.querySelector('.button').style.display = "none";
 	LoadProgress();
-	
+
 }
 
 
@@ -301,7 +330,7 @@ function TimeReturn() {
 	let wait = document.getElementById("waitTime");
 	document.getElementById('waitTime').style.display = "none";
 	if (l_played.length > 0)
-	wait.checked = !wait.checked;
+		wait.checked = !wait.checked;
 	if (wait.checked) timereturn = true;
 	else timereturn = false;
 	if (timereturn) LoadProgress();
@@ -314,18 +343,18 @@ function LoadProgress() {
 			let pgr = document.getElementById("pgrTime");
 			pgr.value--;
 			if (pgr.value > 0)
-			LoadProgress();
+				LoadProgress();
 			else {
 				let mess = 'Player with "X" win';
 				if (CPlayer == 1) mess = 'Player with "O" win';
 				swal(mess);
-				
+
 				// Hiển thị lại Button play
 				document.querySelector('.button').style.display = "block";
-				
+
 				InGame = false;
 			}
 		}, 100);
-	}
+}
 
-	
+
