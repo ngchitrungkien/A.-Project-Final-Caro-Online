@@ -132,7 +132,19 @@ class PlayScreen extends BaseComponent {
         }
     render() {
 
-        console.log(this.state.rank)
+        let topRanking = this.state.rank;
+        let rank = '' // lưu html của rank vào đây
+        //  lấy dữ liệu từ firebase đổ vào rank
+         for(let i=0; i< topRanking.length;i++){
+             rank+= `
+             <tr>
+                <td class="rank">${i+1}</td>
+                <td class="name">${topRanking[i].name}</td>
+                <td class="score">${topRanking[i].score}</td>
+            </tr>
+             `
+           
+        }
         let currentPlayer = JSON.parse(localStorage.getItem('Current-Player'));
         this._shadowRoot.innerHTML = /* html */ `
         ${style}
@@ -166,56 +178,7 @@ class PlayScreen extends BaseComponent {
                         </tr>
                     </thead>
                 <tbody>
-                <tr>
-                    <td class="rank">1</td>
-                    <td class="name"></td>
-                    <td class="score"></td>
-                </tr>
-                        <tr>
-                    <td class="rank">2</td>
-                    <td class="name"></td>
-                    <td class="score"></td>
-                </tr>
-                    <tr>
-                    <td class="rank">3</td>
-                    <td class="name"></td>
-                    <td class="score"></td>
-                </tr>
-                    <tr>
-                    <td class="rank">4</td>
-                    <td class="name"></td>
-                    <td class="score"></td>
-                </tr>
-                    <tr>
-                    <td class="rank">5</td>
-                    <td class="name"></td>
-                    <td class="score"></td>
-                </tr>
-                    <tr>
-                    <td class="rank">6</td>
-                    <td class="name"></td>
-                    <td class="score"></td>
-                </tr>
-                    <tr>
-                    <td class="rank">7</td>
-                    <td class="name"></td>
-                    <td class="score"></td>
-                </tr>
-                    <tr>
-                    <td class="rank">8</td>
-                    <td class="name"></td>
-                    <td class="score"></td>
-                </tr>
-                    <tr>
-                    <td class="rank">9</td>
-                    <td class="name"></td>
-                    <td class="score"></td>
-                </tr>
-                <tr>
-                    <td class="rank">10</td>
-                    <td class="name"></td>
-                    <td class="score"></td>
-                </tr>
+                      ${rank}
                 </tbody>
                 </table>
                 <br>
@@ -311,16 +274,20 @@ class PlayScreen extends BaseComponent {
             }
         )
         
-        let sort = async () => {
 
-            var score1 = await firebase.firestore().collection('users').orderBy('score','desc').limit(10).get();
-            this.setState({
-                rank: getDataFromDocs(score1.docs)
-            })
-            
-        }
         
 
+    }
+    componentDidMount(){
+        //  khởi tạo dữ liệu cho state: rank
+            firebase.firestore().collection('users').onSnapshot( async (snap)=>{
+               let score1= await firebase.firestore().collection('users').orderBy('score','desc').limit(10).get();
+                this.setState({
+                    //  setState cho rank là 10 người chơi có điểm cao nhất
+                    rank: getDataFromDocs(score1.docs)
+                })
+            }) 
+                
     }
 
 
