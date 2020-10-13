@@ -1,5 +1,4 @@
 // Khởi tạo các biến thành phần
-
 const size = 16; // size của bàn cờ
 const countMax = 5; // check biến số để win
 let CPlayer = 0; // Current Player (0 là O,1 là X)
@@ -7,8 +6,28 @@ let InGame = false;
 let l_played = [], l_win = []; // ô đã đánh, ô win
 let mode = 0; // 0: no block; 1: block
 let timereturn = false; // Time wait
+let CurrentUser = JSON.parse(localStorage.getItem('Current-Player')).email;
+let OpponentUser = localStorage.getItem('Opponent');
+let CurrentPlayer = localStorage.getItem('player');
 let db = firebase.firestore();
 //New Game
+
+// Set thứ tự player cho mỗi CurrentUser, player1 ứng với CPlayer = 0 được chơi trước.
+let arrPlayer = ['player1', 'player2'];
+let x = Math.floor(Math.random() * arrPlayer.length);
+if (CurrentUser) {
+	localStorage.setItem('player', arrPlayer[x]);
+	arrPlayer.splice(x, 1);
+
+	if (CurrentPlayer == 'player1') {
+		document.getElementById('user1').innerHTML = CurrentUser + " " + "with O";
+		document.getElementById('user2').innerHTML = OpponentUser + " " + "with X";
+	} else if (CurrentPlayer == 'player2') {
+		document.getElementById('user1').innerHTML = CurrentUser + " " + "with X";
+		document.getElementById('user2').innerHTML = OpponentUser + " " + "with O";
+	}
+}
+
 function Loaded() {
 	CPlayer = 0; // Current Player (0 is O,1 is X)
 	l_played = [], l_win = [];
@@ -34,6 +53,10 @@ function Loaded() {
 }
 
 //Play Game
+
+let updateClick = db.collection('test').doc('test');
+
+
 function Click(id) {
 	if (!InGame) return;
 	let square = document.getElementsByClassName("square");
@@ -44,7 +67,11 @@ function Click(id) {
 	square.item(pos).style.backgroundImage = path;
 	square.item(pos).setAttribute("player", CPlayer.toString());
 	l_played.push(pos);
-	console.log(l_played);
+
+	//Update l_played lên firebase
+	updateClick.update({
+		l_play: firebase.firestore.FieldValue.arrayUnion(pos)
+	});
 
 	let win = WinGame();
 	let pwin = CPlayer;
@@ -52,6 +79,17 @@ function Click(id) {
 
 	if (CPlayer == 0) CPlayer = 1;
 	else CPlayer = 0;
+
+
+	// Khoá lượt click của Player
+	if (CurrentPlayer == 'player1' && CPlayer == 1) {
+		document.getElementById('table').style.pointerEvents = 'none';
+	} else if (CurrentPlayer == 'player2' && CPlayer == 0) {
+		document.getElementById('table').style.pointerEvents = 'none';
+	} else if (CurrentPlayer == 'player2' && l_played.length == 0) {
+		document.getElementById('table').style.pointerEvents = 'none'; // Chặn player 2 đánh lượt đầu.
+	} else document.getElementById('table').style.pointerEvents = 'auto';
+
 
 	let iplayer = "url('img/Opng.png')";
 	if (CPlayer == 1) iplayer = "url('img/Xpng.png')";
@@ -74,7 +112,25 @@ function Click(id) {
 		pgr.value = pgr.getAttribute("max");
 	}
 }
-db.collection('update-game').onSnapshot(Click(id));
+
+// Reload lại bàn cờ từ firebase
+
+async function reload() {
+	let result = await db.collection('test').doc('test').get()
+	let x = result.data().l_play;
+	console.log(x);
+
+	for (let item of x) {
+		Click(item);
+	}
+}
+
+db.collection('test').doc('test').onSnapshot(
+	() => {
+		reload();
+	}
+)
+
 
 // Min Max
 function maxab(a, b) {
@@ -106,7 +162,7 @@ function GetBoard() {
 	var sqr = document.getElementsByClassName("square");
 	for (i = 0; i < size * size; i++)
 		TBoard.push(parseInt(sqr.item(i).getAttribute("player")));
-		console.log(TBoard);
+	console.log(TBoard);
 
 	return TBoard;
 }
@@ -301,7 +357,4 @@ function LoadProgress() {
 		}, 100);
 }
 
-// Lấy dữ liệu 2 ng chơi
-document.getElementById('user-1').innerHTML = JSON.parse(localStorage.getItem('Current-Player')).email;
-document.getElementById('user-2').innerHTML = JSON.parse(localStorage.getItem('Opponent')).email;
-console.log(JSON.parse(localStorage.getItem('Current-Player')).email);
+
