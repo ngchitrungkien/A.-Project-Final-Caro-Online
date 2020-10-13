@@ -4,7 +4,7 @@ body {
 
 #bgr
 {
-	background-image: radial-gradient( #001427, #007acc);
+	background-image: url('img/bgr.jpg');
 	background-repeat: repeat;
 	background-size: cover;
 	z-index:-999;
@@ -21,12 +21,11 @@ body {
 }
 
 h1 {
-	text-shadow: 3px 2px #001427;
+	text-shadow: 2px 2px #001427;
 }
 img {
 	width: 100px;
 	margin-right: 20px;
-	border: 2px solid #001427;
 	border-radius: 20px;
 }
 
@@ -45,6 +44,9 @@ img {
 	margin-left:280px;
 	overflow:hidden;
 }
+
+
+
 .user {
 	background: #ccc;
 	width: 120px;
@@ -54,7 +56,7 @@ img {
 	padding: 20px;
 	border: 1px solid #001427;
 	border-radius: 8px;
-	opacity: 0.7;
+	opacity: 0.8;
 	color: #001427;
 }
 

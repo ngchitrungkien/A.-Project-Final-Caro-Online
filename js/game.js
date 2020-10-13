@@ -1,5 +1,5 @@
 // Khởi tạo các biến thành phần
-
+var Currentplayer = localStorage.getItem('email')
 const size = 16; // size của bàn cờ
 const countMax = 5; // check biến số để win
 let CPlayer = 0; // Current Player (0 là O,1 là X)
@@ -34,6 +34,10 @@ function Loaded() {
 }
 
 //Play Game
+
+let updateClick =  db.collection('test').doc('test');
+
+
 function Click(id) {
 	if (!InGame) return;
 	let square = document.getElementsByClassName("square");
@@ -44,14 +48,21 @@ function Click(id) {
 	square.item(pos).style.backgroundImage = path;
 	square.item(pos).setAttribute("player", CPlayer.toString());
 	l_played.push(pos);
-	console.log(l_played);
+
+	//Update l_played lên firebase
+	updateClick.update({
+		l_play: firebase.firestore.FieldValue.arrayUnion(pos)
+	});
 
 	let win = WinGame();
 	let pwin = CPlayer;
 
 
-	if (CPlayer == 0) CPlayer = 1;
-	else CPlayer = 0;
+	if (CPlayer == 0) CPlayer = 1; 
+	else {
+		CPlayer = 0;
+	}
+	
 
 	let iplayer = "url('img/Opng.png')";
 	if (CPlayer == 1) iplayer = "url('img/Xpng.png')";
@@ -74,7 +85,23 @@ function Click(id) {
 		pgr.value = pgr.getAttribute("max");
 	}
 }
-db.collection('update-game').onSnapshot(Click(id));
+
+// Reload lại bàn cờ từ firebase
+	
+async function reload() {
+	let result = await db.collection('test').doc('test').get()
+	let x = result.data().l_play;
+	for(item of x){
+		Click(item);	
+	}
+}
+
+db.collection('test').doc('test').onSnapshot(
+	() => {
+		reload();
+	}
+)
+
 
 // Min Max
 function maxab(a, b) {
@@ -105,9 +132,9 @@ function GetBoard() {
 	var TBoard = [];
 	var sqr = document.getElementsByClassName("square");
 	for (i = 0; i < size * size; i++)
-		TBoard.push(parseInt(sqr.item(i).getAttribute("player")));
-		console.log(TBoard);
-
+	TBoard.push(parseInt(sqr.item(i).getAttribute("player")));
+	console.log(TBoard);
+	
 	return TBoard;
 }
 
@@ -118,7 +145,7 @@ function WinGame() {
 		for (y = 0; y < size; y++) {
 			if (winHor(x, y, Board) || winVer(x, y, Board) || winCross1(x, y, Board)
 				|| winCross2(x, y, Board)) {
-				let square = document.getElementsByClassName("square");
+					let square = document.getElementsByClassName("square");
 				for (i = 0; i < l_win.length; i++) {
 					square.item(l_win[i]).style.backgroundColor = "#FF0";
 				}
@@ -137,7 +164,7 @@ function winHor(x, y, Board) {
 	let count = 0, countO = 0;// count opponent
 	let player = Board[x + y * size];
 	if (player == -1) return false;
-
+	
 	if (x > 0) {
 		let p = Board[x - 1 + y * size];
 		if (p != player && p != -1) countO++;
@@ -154,9 +181,9 @@ function winHor(x, y, Board) {
 	if (count >= countMax) {
 		if (mode == 0)
 			return true;
-		else {
-			if (countO >= 2) return false;
-			else return true;
+			else {
+				if (countO >= 2) return false;
+				else return true;
 		}
 	}
 	return false;
@@ -168,12 +195,12 @@ function winVer(x, y, Board) {
 	let count = 0, countO = 0;
 	let player = Board[x + y * size];
 	if (player == -1) return false;
-
+	
 	if (y > 0) {
 		let p = Board[x + (y - 1) * size];
 		if (p != player && p != -1) countO++;
 	}
-
+	
 	for (i = y; i < size; i++) {
 		let p = Board[x + i * size];
 		if (p == player && p != -1) {
@@ -184,7 +211,7 @@ function winVer(x, y, Board) {
 	}
 	if (count >= countMax) {
 		if (mode == 0)
-			return true;
+		return true;
 		else {
 			if (countO >= 2) return false;
 			else return true;
@@ -217,7 +244,7 @@ function winCross1(x, y, Board) {
 	if (count >= countMax) {
 		if (mode == 0)
 			return true;
-		else {
+			else {
 			if (countO >= 2) return false;
 			else return true;
 		}
@@ -237,7 +264,7 @@ function winCross2(x, y, Board) {
 		let p = Board[x - 1 + (y - 1) * size];
 		if (p != player && p != -1) countO++;
 	}
-
+	
 	for (i = 0; i < minab(size - x, size - y); i++) {
 		let p = Board[(x + i) + (y + i) * size];
 		if (p == player && p != -1) {
@@ -249,8 +276,8 @@ function winCross2(x, y, Board) {
 	if (count >= countMax) {
 		if (mode == 0)
 			return true;
-		else {
-			if (countO >= 2) return false;
+			else {
+				if (countO >= 2) return false;
 			else return true;
 		}
 	}
@@ -265,7 +292,7 @@ function PvsP() {
 	pgr.value = pgr.getAttribute("max");
 	document.querySelector('.button').style.display = "none";
 	LoadProgress();
-
+	
 }
 
 
@@ -274,7 +301,7 @@ function TimeReturn() {
 	let wait = document.getElementById("waitTime");
 	document.getElementById('waitTime').style.display = "none";
 	if (l_played.length > 0)
-		wait.checked = !wait.checked;
+	wait.checked = !wait.checked;
 	if (wait.checked) timereturn = true;
 	else timereturn = false;
 	if (timereturn) LoadProgress();
@@ -287,21 +314,18 @@ function LoadProgress() {
 			let pgr = document.getElementById("pgrTime");
 			pgr.value--;
 			if (pgr.value > 0)
-				LoadProgress();
+			LoadProgress();
 			else {
 				let mess = 'Player with "X" win';
 				if (CPlayer == 1) mess = 'Player with "O" win';
 				swal(mess);
-
+				
 				// Hiển thị lại Button play
 				document.querySelector('.button').style.display = "block";
-
+				
 				InGame = false;
 			}
 		}, 100);
-}
+	}
 
-// Lấy dữ liệu 2 ng chơi
-document.getElementById('user-1').innerHTML = JSON.parse(localStorage.getItem('Current-Player')).email;
-document.getElementById('user-2').innerHTML = JSON.parse(localStorage.getItem('Opponent')).email;
-console.log(JSON.parse(localStorage.getItem('Current-Player')).email);
+	
