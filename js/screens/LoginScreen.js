@@ -107,7 +107,7 @@ class LoginScreen extends BaseComponent {
             // Lấy dữ liệu từ các input-wrapper
             let email = this._shadowRoot.querySelector('.email').value;
             let password = this._shadowRoot.querySelector('.password').value;
-
+            localStorage.clear();
             // Kiểm tra dữ liệu nhập vào, nếu có lỗi thì show ra
             let isPassed = true;
 
