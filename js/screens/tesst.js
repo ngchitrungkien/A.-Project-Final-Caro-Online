@@ -1,7 +1,6 @@
 import {
     BaseComponent
 } from '../BaseComponent.js'
-import {getDataFromDocs} from './../utils.js'
 
 const style = /* html */ `
 <style>
@@ -124,15 +123,8 @@ const style = /* html */ `
 `;
 
 class PlayScreen extends BaseComponent {
-        constructor(props){
-            super();
-            this.state = {
-                rank:[]
-            }
-        }
-    render() {
 
-        console.log(this.state.rank)
+    render() {
         let currentPlayer = JSON.parse(localStorage.getItem('Current-Player'));
         this._shadowRoot.innerHTML = /* html */ `
         ${style}
@@ -162,59 +154,59 @@ class PlayScreen extends BaseComponent {
                         <tr>
                             <th>Rank</th>
                             <th>Name</th>
-                            <th>Score</th>
+                            <th>Points</th>
                         </tr>
                     </thead>
                 <tbody>
                 <tr>
                     <td class="rank">1</td>
                     <td class="name"></td>
-                    <td class="score"></td>
+                    <td class="points"></td>
                 </tr>
                         <tr>
                     <td class="rank">2</td>
                     <td class="name"></td>
-                    <td class="score"></td>
+                    <td class="points"></td>
                 </tr>
                     <tr>
                     <td class="rank">3</td>
                     <td class="name"></td>
-                    <td class="score"></td>
+                    <td class="points"></td>
                 </tr>
                     <tr>
                     <td class="rank">4</td>
                     <td class="name"></td>
-                    <td class="score"></td>
+                    <td class="points"></td>
                 </tr>
                     <tr>
                     <td class="rank">5</td>
                     <td class="name"></td>
-                    <td class="score"></td>
+                    <td class="points"></td>
                 </tr>
                     <tr>
                     <td class="rank">6</td>
                     <td class="name"></td>
-                    <td class="score"></td>
+                    <td class="points"></td>
                 </tr>
                     <tr>
                     <td class="rank">7</td>
                     <td class="name"></td>
-                    <td class="score"></td>
+                    <td class="points"></td>
                 </tr>
                     <tr>
                     <td class="rank">8</td>
                     <td class="name"></td>
-                    <td class="score"></td>
+                    <td class="points"></td>
                 </tr>
                     <tr>
                     <td class="rank">9</td>
                     <td class="name"></td>
-                    <td class="score"></td>
+                    <td class="points"></td>
                 </tr>
                 <tr>
                     <td class="rank">10</td>
                     <td class="name"></td>
-                    <td class="score"></td>
+                    <td class="points"></td>
                 </tr>
                 </tbody>
                 </table>
@@ -229,31 +221,60 @@ class PlayScreen extends BaseComponent {
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         `;
         this.$ranking = this._shadowRoot.querySelector(".btn-ranking");
-        this.$back = this._shadowRoot.querySelector(".btn-back");
-
-        this.$ranking.onclick = () => {
-            var x = this._shadowRoot.querySelector('.play-screen');
-            if (x.style.display === 'none') {
-                x.style.display = 'block';
-            } else {
-                x.style.display = 'none';
-            }
-        };
+            this.$back = this._shadowRoot.querySelector(".btn-back");
+    
+            this.$ranking.onclick = () => {
+                var x = this._shadowRoot.querySelector('.play-screen');
+                if (x.style.display === 'none') {
+                    x.style.display = 'block';
+                } else {
+                    x.style.display = 'none';
+                }
+            };
 
         this.$logOut = this._shadowRoot.querySelector(".btn-log-out");
         this.$play = this._shadowRoot.querySelector(".btn-play");
         this.$status = this._shadowRoot.querySelector(".status");
 
+        //------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+
+
+
+
         this.$logOut.onclick = () => {
-            localStorage.removeItem("Current-Player")
-            localStorage.removeItem("Opponent")
+            localStorage.clear();
             router.navigate('#!/login')
         }
 
+        //bam nut findgame
         this.$play.onclick = async () => {
 
             if (currentPlayer.status == `online`) {
-                //tao ra document chua thong tin
                 //neu stt dang onl, chuyen thanh waiting
                 await firebase.firestore().collection('queue').doc(currentPlayer.email).set({
                     email: currentPlayer.email,
@@ -264,14 +285,14 @@ class PlayScreen extends BaseComponent {
                 this.$status.innerHTML = `${currentPlayer.status}`
                 localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
             } else if (currentPlayer.status == `waiting`) {
-                //huy: xoa khoi collection
+             
                 await firebase.firestore().collection('queue').doc(currentPlayer.email).delete();
                 currentPlayer.status = `online`;
                 this.$play.innerHTML = `Play`
                 this.$status.innerHTML = `${currentPlayer.status}`
                 localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
             }
-
+            
         }
 
         this.$back.onclick = () => {
@@ -280,63 +301,70 @@ class PlayScreen extends BaseComponent {
 
         //moi 5s: 
         var timer = setInterval(async () => {
+
             let queue = await firebase.firestore().collection('queue').get();
             if (queue.docs[1]) {
-
+                //neu ton tai 2 nguoi choi, them 2 nguoi choi vao "dang choi game" (collection 'ingame')
                 await firebase.firestore().collection('ingame').add({
                     player1: queue.docs[0].data().email,
                     player2: queue.docs[1].data().email,
                 })
-                //neu 1 va 2 bi xoa thi ms tiep tuc interval
-                clearInterval(timer)
-            }
-            if(localStorage.getItem('Opponent')){
-                console.log('found!');
-                setTimeout(() => {
-                    router.navigate('main')
-                }, 4000);
+
+                //dkien logic:
+
+                //player phai o trong ingame moi duoc xoa!
+
+                // if (queue.docs[0].data().email == currentPlayer.email || queue.docs[1].data().email == currentPlayer.email) {
+                //     //neu 1 trong 2 nguoi choi la player tren
+                   
+                //     if (queue.docs[0].data().email == currentPlayer.email) {
+                //         localStorage.setItem('Opponent', queue.docs[1].data().email)
+                //     } else if (queue.docs[1].data().email == currentPlayer.email) {
+                //         localStorage.setItem('Opponent', queue.docs[0].data().email)
+                //     }
+                //     console.log('found!')
+
+                //     //lay ra id room
+                //     let find1 = await firebase.firestore().collection('ingame').where('player1','==',currentPlayer.email).get();
+                //     let find2 = await firebase.firestore().collection('ingame').where('player2','==',currentPlayer.email).get();
+                //     if(find1.docs[0]){
+                //         localStorage.setItem('roomID',find1.docs[0].id)
+                //     } else if(find2.docs[0]){
+                //         localStorage.setItem('roomID',find1.docs[0].id)
+                //     }
+
+
+                //     clearInterval(timer);
+                //     currentPlayer.status = 'playing';
+                //     this.$status.innerHTML = `${currentPlayer.status}`;
+                //     localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
+                //     router.navigate('main')
+                // }
             }
         }, 10000);
-
+        
 
         firebase.firestore().collection('ingame').onSnapshot(
             async () => {
                 //neu player ton tai trong 1 phong nao do, set opponent
                 let player1 = await firebase.firestore().collection('ingame').where('player1', '==', currentPlayer.email).get();
                 let player2 = await firebase.firestore().collection('ingame').where('player2', '==', currentPlayer.email).get();
-                if (player1.docs[0] || player2.docs[0]) {
-                    if (player1.docs[0]) {
-                        localStorage.setItem('Opponent', player1.docs[0].data().player2);
-                        localStorage.setItem('roomID', player1.docs[0].id);
-                    } else if (player2.docs[0]) {
-                        localStorage.setItem('Opponent', player2.docs[0].data().player1);
-                        localStorage.setItem('roomID', player2.docs[0].id);
+                if(player1.docs[0] || player2.docs[0]){
+                    if(player1.docs[0]){
+                        localStorage.setItem('Opponent',player1.docs[0].data().player2);
+                        localStorage.setItem('roomID',player1.docs[0].id);
+                    } else if(player2.docs[0]) {
+                        localStorage.setItem('Opponent',player2.docs[0].data().player1);
+                        localStorage.setItem('roomID',player2.docs[0].id);
                     }
-                    setTimeout(async () => {
-                        await firebase.firestore().collection('queue').doc(currentPlayer.email).delete();
-                        
-                    }, 2000);
-
-                   
-                    
-                    
+                    await firebase.firestore().collection('queue').doc(currentPlayer.email).delete();
                 }
                 console.log('found')
+                router.navigate('main')
                
-                
-
             }
         )
-        
-        let sort = async () => {
 
-            var score1 = await firebase.firestore().collection('users').orderBy('score','desc').limit(10).get();
-            this.setState({
-                rank: getDataFromDocs(score1.docs)
-            })
-            
-        }
-        
 
     }
 
@@ -345,5 +373,64 @@ class PlayScreen extends BaseComponent {
 
 }
 
-
+//set inter val la phai 5s moi chay?
 window.customElements.define('play-screen', PlayScreen)
+
+
+
+//moi 5s, day 2 nguoi choi trong hang cho vao phong game
+
+//nhan ra su thay doi cua phong game, neu player ton tai trong  1 doc nao do cua phong game, set opponent, room id, xoa doc(id) currentplayer, navigate den trang de choi
+
+
+
+
+
+
+
+
+
+
+
+      //reload lai moi 3s
+        var timer = setInterval(async () => {
+
+            let queue = await firebase.firestore().collection('queue').get();
+            if (queue.docs[1]) {
+                 //neu ton tai 2 nguoi choi, them 2 nguoi choi vao "dang choi game" (collection 'ingame')
+                await firebase.firestore().collection('ingame').add({
+                    player1: queue.docs[0].data().email,
+                    player2: queue.docs[1].data().email,
+                });
+
+                if (queue.docs[0].data().email == currentPlayer.email || queue.docs[1].data().email == currentPlayer.email) {
+                    console.log(queue.docs[0].data());
+                    console.log(queue.docs[1].data());
+                    if (queue.docs[0].data().email == currentPlayer.email) {
+                        localStorage.setItem('Opponent', queue.docs[1].data().email)
+                    } else if (queue.docs[1].data().email == currentPlayer.email) {
+                        localStorage.setItem('Opponent', queue.docs[0].data().email)
+                    }
+                    console.log('found!')
+                    clearInterval(timer);
+                    currentPlayer.status = 'playing';
+                    this.$status.innerHTML = `${currentPlayer.status}`;
+                    localStorage.setItem('Current-Player', JSON.stringify(currentPlayer));
+                    router.navigate('main')
+                }
+            }
+        }, 5000);
+        firebase.firestore().collection('ingame').onSnapshot(
+            async () => {
+                let result1 = await firebase.firestore().collection('queue').where('email', '==', currentPlayer.email).get();
+                if (currentPlayer.status == 'playing') {
+                    if (result1.docs[0]) {
+                        console.log(result1.docs[0].data())
+                        setTimeout(async () => {
+                            await firebase.firestore().collection('queue').doc(result1.docs[0].id).delete();
+                        }, 10000);
+
+                    }
+                }
+            }
+        )
