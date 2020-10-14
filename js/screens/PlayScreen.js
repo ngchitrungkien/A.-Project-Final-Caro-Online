@@ -245,8 +245,7 @@ class PlayScreen extends BaseComponent {
         this.$status = this._shadowRoot.querySelector(".status");
 
         this.$logOut.onclick = () => {
-            localStorage.removeItem("Current-Player")
-            localStorage.removeItem("Opponent")
+            localStorage.clear();
             router.navigate('#!/login')
         }
 
@@ -290,12 +289,7 @@ class PlayScreen extends BaseComponent {
                 //neu 1 va 2 bi xoa thi ms tiep tuc interval
                 clearInterval(timer)
             }
-            if(localStorage.getItem('Opponent')){
-                console.log('found!');
-                setTimeout(() => {
-                    router.navigate('main')
-                }, 4000);
-            }
+            
         }, 10000);
 
 
@@ -317,7 +311,12 @@ class PlayScreen extends BaseComponent {
                         
                     }, 2000);
 
-                   
+                    if(localStorage.getItem('Opponent') && localStorage.getItem('roomID')){
+                        console.log('found!');
+                        setTimeout(() => {
+                            router.navigate('main')
+                        }, 4000);
+                    }
                     
                     
                 }

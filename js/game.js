@@ -3,7 +3,8 @@ const size = 16; // size của bàn cờ
 const countMax = 5; // check biến số để win
 let CPlayer = 0; // Current Player (0 là O,1 là X)
 let InGame = false;
-let l_played = [], l_win = []; // ô đã đánh, ô win
+let l_played = [],
+	l_win = []; // ô đã đánh, ô win
 let mode = 0; // 0: no block; 1: block
 let timereturn = false; // Time wait
 let CurrentUser = JSON.parse(localStorage.getItem('Current-Player')).email;
@@ -28,6 +29,7 @@ if (CurrentPlayer == 'player1') {
 	document.getElementById('user2').innerHTML = OpponentUser + " " + "with O";
 }
 
+
 function Loaded() {
 	CPlayer = 0; // Current Player (0 is O,1 is X)
 	l_played = [], l_win = [];
@@ -50,11 +52,18 @@ function Loaded() {
 			square.item(x + y * size).setAttribute("player", "-1");
 		}
 	}
+	if (CurrentPlayer == 'player1' && CPlayer == 1) {
+		document.getElementById('table').style.pointerEvents = 'none';
+	} else if (CurrentPlayer == 'player2' && CPlayer == 0) {
+		document.getElementById('table').style.pointerEvents = 'none';
+	} 
+	 
 }
 
 //Play Game
 
 let updateClick = db.collection('test').doc('test');
+
 
 
 function Click(id) {
@@ -81,16 +90,6 @@ function Click(id) {
 	else CPlayer = 0;
 
 
-	// Khoá lượt click của Player
-	if (CurrentPlayer == 'player1' && CPlayer == 1) {
-		document.getElementById('table').style.pointerEvents = 'none';
-	} else if (CurrentPlayer == 'player2' && CPlayer == 0) {
-		document.getElementById('table').style.pointerEvents = 'none';
-	} else if (CurrentPlayer == 'player2' && l_played.length == 0) {
-		document.getElementById('table').style.pointerEvents = 'none'; // Chặn player 2 đánh lượt đầu.
-	} else document.getElementById('table').style.pointerEvents = 'auto';
-
-
 	let iplayer = "url('img/Opng.png')";
 	if (CPlayer == 1) iplayer = "url('img/Xpng.png')";
 	let imgp = document.getElementById("imgPlayer");
@@ -106,11 +105,18 @@ function Click(id) {
 		document.querySelector('.button').style.display = "block";
 
 		InGame = false;
-	}
-	else {
+	} else {
 		let pgr = document.getElementById("pgrTime");
 		pgr.value = pgr.getAttribute("max");
 	}
+	console.log(CPlayer);
+
+	// Khoá lượt click của Player
+	if (CurrentPlayer == 'player1' && CPlayer == 1) {
+		document.getElementById('table').style.pointerEvents = 'none';
+	} else if (CurrentPlayer == 'player2' && CPlayer == 0) {
+		document.getElementById('table').style.pointerEvents = 'none';
+	}  else document.getElementById('table').style.pointerEvents = 'auto';
 }
 
 // Reload lại bàn cờ từ firebase
@@ -118,7 +124,7 @@ function Click(id) {
 async function reload() {
 	let result = await db.collection('test').doc('test').get()
 	let x = result.data().l_play;
-	console.log(x);
+	
 
 	for (let item of x) {
 		Click(item);
@@ -137,6 +143,7 @@ function maxab(a, b) {
 	if (a > b) return a;
 	else return b;
 }
+
 function minab(a, b) {
 	if (a < b) return a;
 	else return b;
@@ -162,7 +169,7 @@ function GetBoard() {
 	var sqr = document.getElementsByClassName("square");
 	for (i = 0; i < size * size; i++)
 		TBoard.push(parseInt(sqr.item(i).getAttribute("player")));
-	console.log(TBoard);
+	// console.log(TBoard);
 
 	return TBoard;
 }
@@ -172,8 +179,8 @@ function WinGame() {
 	let Board = GetBoard();
 	for (x = 0; x < size; x++) {
 		for (y = 0; y < size; y++) {
-			if (winHor(x, y, Board) || winVer(x, y, Board) || winCross1(x, y, Board)
-				|| winCross2(x, y, Board)) {
+			if (winHor(x, y, Board) || winVer(x, y, Board) || winCross1(x, y, Board) ||
+				winCross2(x, y, Board)) {
 				let square = document.getElementsByClassName("square");
 				for (i = 0; i < l_win.length; i++) {
 					square.item(l_win[i]).style.backgroundColor = "#FF0";
@@ -190,7 +197,8 @@ function WinGame() {
 // Theo hàng ngang
 function winHor(x, y, Board) {
 	l_win = [];
-	let count = 0, countO = 0;// count opponent
+	let count = 0,
+		countO = 0; // count opponent
 	let player = Board[x + y * size];
 	if (player == -1) return false;
 
@@ -204,8 +212,10 @@ function winHor(x, y, Board) {
 		if (p == player && p != -1) {
 			count++;
 			l_win.push(i + y * size);
-		}
-		else { if (p != -1) countO++; break; };
+		} else {
+			if (p != -1) countO++;
+			break;
+		};
 	}
 	if (count >= countMax) {
 		if (mode == 0)
@@ -221,7 +231,8 @@ function winHor(x, y, Board) {
 // Theo hàng dọc
 function winVer(x, y, Board) {
 	l_win = [];
-	let count = 0, countO = 0;
+	let count = 0,
+		countO = 0;
 	let player = Board[x + y * size];
 	if (player == -1) return false;
 
@@ -235,8 +246,10 @@ function winVer(x, y, Board) {
 		if (p == player && p != -1) {
 			count++;
 			l_win.push(x + i * size);
-		}
-		else { if (p != -1) countO++; break; };
+		} else {
+			if (p != -1) countO++;
+			break;
+		};
 	}
 	if (count >= countMax) {
 		if (mode == 0)
@@ -253,7 +266,8 @@ function winVer(x, y, Board) {
 function winCross1(x, y, Board) {
 	l_win = [];
 	if (x > size - countMax || y < countMax - 1) return false;
-	let count = 0, countO = 0;
+	let count = 0,
+		countO = 0;
 	let player = Board[x + y * size];
 	if (player == -1) return false;
 
@@ -267,8 +281,10 @@ function winCross1(x, y, Board) {
 		if (p == player && p != -1) {
 			count++;
 			l_win.push((x + i) + (y - i) * size);
-		}
-		else { if (p != -1) countO++; break; };
+		} else {
+			if (p != -1) countO++;
+			break;
+		};
 	}
 	if (count >= countMax) {
 		if (mode == 0)
@@ -285,7 +301,8 @@ function winCross1(x, y, Board) {
 function winCross2(x, y, Board) {
 	l_win = [];
 	if (x > size - countMax || y > size - countMax) return false;
-	let count = 0, countO = 0;
+	let count = 0,
+		countO = 0;
 	let player = Board[x + y * size];
 	if (player == -1) return false;
 
@@ -299,8 +316,10 @@ function winCross2(x, y, Board) {
 		if (p == player && p != -1) {
 			count++;
 			l_win.push((x + i) + (y + i) * size);
-		}
-		else { if (p != -1) countO++; break; };
+		} else {
+			if (p != -1) countO++;
+			break;
+		};
 	}
 	if (count >= countMax) {
 		if (mode == 0)
@@ -356,5 +375,3 @@ function LoadProgress() {
 			}
 		}, 100);
 }
-
-
