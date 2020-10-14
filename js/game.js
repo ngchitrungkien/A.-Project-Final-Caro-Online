@@ -21,11 +21,11 @@ if (CurrentUser) {
 }
 
 if (CurrentPlayer == 'player1') {
-	document.getElementById('user1').innerHTML = CurrentUser + " " + "with O";
-	document.getElementById('user2').innerHTML = OpponentUser + " " + "with X";
+	document.getElementById('user1').innerHTML = CurrentUser + " " + "[with O]";
+	document.getElementById('user2').innerHTML = OpponentUser + " " + "[with X]";
 } else if (CurrentPlayer == 'player2') {
-	document.getElementById('user1').innerHTML = CurrentUser + " " + "with X";
-	document.getElementById('user2').innerHTML = OpponentUser + " " + "with O";
+	document.getElementById('user1').innerHTML = CurrentUser + " " + "[with X]";
+	document.getElementById('user2').innerHTML = OpponentUser + " " + "[with O]";
 }
 
 

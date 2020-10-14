@@ -219,7 +219,7 @@ class PlayScreen extends BaseComponent {
                 </tbody>
                 </table>
                 <br>
-                <button class='btn-back'>Back</button>
+                <button class='btn-back' style="display:none;">Back</button>
             </div>
             </div>
     
@@ -233,8 +233,11 @@ class PlayScreen extends BaseComponent {
 
         this.$ranking.onclick = () => {
             var x = this._shadowRoot.querySelector('.play-screen');
+            var y = this._shadowRoot.querySelector('.btn-back');
+            
             if (x.style.display === 'none') {
                 x.style.display = 'block';
+                y.style.display = 'block';
             } else {
                 x.style.display = 'none';
             }
@@ -314,7 +317,7 @@ class PlayScreen extends BaseComponent {
                     if(localStorage.getItem('Opponent') && localStorage.getItem('roomID')){
                         console.log('found!');
                         setTimeout(() => {
-                            router.navigate('main')
+                            window.location.href = 'game.html'
                         }, 4000);
                     }
                     

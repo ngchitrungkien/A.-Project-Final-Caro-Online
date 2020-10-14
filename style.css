@@ -29,36 +29,22 @@ img {
 	border-radius: 20px;
 }
 
-.main-game {
-	/* float: left;
-	align-items: center;
-	justify-content: center;
-	padding-left: 10px; */
-}
 
-#divmain
-{
-	/* width:500px;
-	height:500px;
-	float:left;
-	margin-left:280px;
-	overflow:hidden; */
-}
 
 
 
 .user {
 	background: #ccc;
-	width: 120px;
-	height: 120px;
+	width: 166px;
+	height: 166px;
 	margin-bottom: 150px;
 	margin-left: 80px;
-	padding: 20px;
 	border: 1px solid #001427;
 	border-radius: 8px;
 	opacity: 0.8;
-	color: #ccc;
+	color: #001427;
 	text-align: center;
+	line-height: 83px;
 }
 
 #divcontrol
