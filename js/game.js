@@ -3,8 +3,7 @@ const size = 16; // size của bàn cờ
 const countMax = 5; // check biến số để win
 let CPlayer = 0; // Current Player (0 là O,1 là X)
 let InGame = false;
-let l_played = [],
-	l_win = []; // ô đã đánh, ô win
+let l_played = [], l_win = []; // ô đã đánh, ô win
 let mode = 0; // 0: no block; 1: block
 let timereturn = false; // Time wait
 let CurrentUser = JSON.parse(localStorage.getItem('Current-Player')).email;
@@ -52,6 +51,8 @@ function Loaded() {
 			square.item(x + y * size).setAttribute("player", "-1");
 		}
 	}
+
+
 	if (CurrentPlayer == 'player1' && CPlayer == 1) {
 		document.getElementById('table').style.pointerEvents = 'none';
 	} else if (CurrentPlayer == 'player2' && CPlayer == 0) {
