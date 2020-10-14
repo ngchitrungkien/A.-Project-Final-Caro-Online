@@ -10,19 +10,33 @@ let CurrentUser = JSON.parse(localStorage.getItem('Current-Player')).email;
 let OpponentUser = localStorage.getItem('Opponent');
 let CurrentPlayer = localStorage.getItem('player');
 let db = firebase.firestore();
+
 //New Game
 
+//Set thứ tự player cho mỗi CurrentUser, player1 ứng với CPlayer = 0 được chơi trước.
+let iD = localStorage.getItem('roomID');
 
+async function read() {
+	let result = await db.collection('ingame').doc(iD).get();
+	objPlayer = result.data();
+	if (objPlayer.player1 == CurrentUser) {
+		localStorage.setItem('player', 'player1');
+	} else if (objPlayer.player2 == CurrentUser) {
+		localStorage.setItem('player', 'player2');
+	}
+}
+read();
 
 function Loaded() {
 	// Set thứ tự player cho mỗi CurrentUser, player1 ứng với CPlayer = 0 được chơi trước.
-	let arrPlayer = ['player1', 'player2'];
-	let x = Math.floor(Math.random() * arrPlayer.length);
-	if (CurrentUser) {
-		localStorage.setItem('player', arrPlayer[x]);
-		arrPlayer.splice(x, 1);
-	}
-	
+	// let arrPlayer = ['player1', 'player2'];
+	// let x = Math.floor(Math.random() * arrPlayer.length);
+	// if (CurrentUser) {
+	// 	localStorage.setItem('player', arrPlayer[x]);
+	// 	arrPlayer.splice(x, 1);
+	// }
+
+	//Load dữ liệu User
 	if (CurrentPlayer == 'player1') {
 		document.getElementById('user1').innerHTML = CurrentUser + " " + "[with O]";
 		document.getElementById('user2').innerHTML = OpponentUser + " " + "[with X]";
@@ -30,7 +44,7 @@ function Loaded() {
 		document.getElementById('user1').innerHTML = CurrentUser + " " + "[with X]";
 		document.getElementById('user2').innerHTML = OpponentUser + " " + "[with O]";
 	}
-	
+
 	CPlayer = 0; // Current Player (0 is O,1 is X)
 	l_played = [], l_win = [];
 	let imgp = document.getElementById("imgPlayer");
@@ -58,8 +72,8 @@ function Loaded() {
 		document.getElementById('table').style.pointerEvents = 'none';
 	} else if (CurrentPlayer == 'player2' && CPlayer == 0) {
 		document.getElementById('table').style.pointerEvents = 'none';
-	} 
-	 
+	}
+
 }
 
 //Play Game
@@ -117,7 +131,7 @@ function Click(id) {
 		document.getElementById('table').style.pointerEvents = 'none';
 	} else if (CurrentPlayer == 'player2' && CPlayer == 0) {
 		document.getElementById('table').style.pointerEvents = 'none';
-	}  else document.getElementById('table').style.pointerEvents = 'auto';
+	} else document.getElementById('table').style.pointerEvents = 'auto';
 }
 
 // Reload lại bàn cờ từ firebase
@@ -125,7 +139,7 @@ function Click(id) {
 async function reload() {
 	let result = await db.collection('test').doc('test').get()
 	let x = result.data().l_play;
-	
+
 
 	for (let item of x) {
 		Click(item);
