@@ -30,19 +30,19 @@ img {
 }
 
 .main-game {
-	float: left;
+	/* float: left;
 	align-items: center;
 	justify-content: center;
-	padding-left: 10px;
+	padding-left: 10px; */
 }
 
 #divmain
 {
-	width:500px;
+	/* width:500px;
 	height:500px;
 	float:left;
 	margin-left:280px;
-	overflow:hidden;
+	overflow:hidden; */
 }
 
 
@@ -144,4 +144,18 @@ img {
 .button:active {
 	background-color: #007ACC;
 	outline: none;
+}
+/*  */
+#playground{
+	display: flex;
+	justify-content: space-around;
+}
+#ground{
+	display: flex;
+}
+#user-info{
+	margin-right: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }

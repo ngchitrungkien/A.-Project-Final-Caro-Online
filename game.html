@@ -45,29 +45,37 @@
         <h1>CARO ZONE</h1>
     </div>
     
-    <div class="main-game">
-        <div id="divmain">
-            <table id="table">
-            </table>
+    <div id="playground">
+        
+        <div id="ground">
+            <!-- cho phan ban co -->
+            <div id="user-info">
+                <!-- o chua thong tin player -->
+                <div class="user user--1" id="user1"></div>
+
+                <div class="user user--2" id="user2"></div>
+            </div>
+
+            <div id="divmain">
+                <table id="table">
+                </table>
+                <!-- ban co -->
+            </div>
         </div>
-        <div>
-            <div class="user user--1" id="user1"></div>
-            <br>
-            <div class="user user--2" id="user2"></div>
+
+
+        <div id="divcontrol">
+            <!-- cho phan dieu khien -->
+            <div id="label1"><b>CURRENT PLAYER:</b></div>
+            <div id="imgPlayer"></div>
+            <br />
+            <div id="label2"><input type="checkbox" id="waitTime" onClick="TimeReturn()" /><b>TIME:</b></div>
+            <progress id="pgrTime" max="100" value="100"></progress>
+            <time></time>
+            <br />
+            <input type="button" class="button" value="PLAY" onClick="PvsP()" />
         </div>
     </div>
-
-    <div id="divcontrol">
-        <div id="label1"><b>CURRENT PLAYER:</b></div>
-        <div id="imgPlayer"></div>
-        <br />
-        <div id="label2"><input type="checkbox" id="waitTime" onClick="TimeReturn()" /><b>TIME:</b></div>
-        <progress id="pgrTime" max="100" value="100"></progress>
-        <time></time>
-        <br />
-        <input type="button" class="button" value="PLAY" onClick="PvsP()" />
-    </div>
-
     <script type="text/javascript" src="./js/game.js"></script>
 </body>
 
