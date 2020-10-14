@@ -12,24 +12,25 @@ let CurrentPlayer = localStorage.getItem('player');
 let db = firebase.firestore();
 //New Game
 
-// Set thứ tự player cho mỗi CurrentUser, player1 ứng với CPlayer = 0 được chơi trước.
-let arrPlayer = ['player1', 'player2'];
-let x = Math.floor(Math.random() * arrPlayer.length);
-if (CurrentUser) {
-	localStorage.setItem('player', arrPlayer[x]);
-	arrPlayer.splice(x, 1);
-}
-
-if (CurrentPlayer == 'player1') {
-	document.getElementById('user1').innerHTML = CurrentUser + " " + "[with O]";
-	document.getElementById('user2').innerHTML = OpponentUser + " " + "[with X]";
-} else if (CurrentPlayer == 'player2') {
-	document.getElementById('user1').innerHTML = CurrentUser + " " + "[with X]";
-	document.getElementById('user2').innerHTML = OpponentUser + " " + "[with O]";
-}
 
 
 function Loaded() {
+	// Set thứ tự player cho mỗi CurrentUser, player1 ứng với CPlayer = 0 được chơi trước.
+	let arrPlayer = ['player1', 'player2'];
+	let x = Math.floor(Math.random() * arrPlayer.length);
+	if (CurrentUser) {
+		localStorage.setItem('player', arrPlayer[x]);
+		arrPlayer.splice(x, 1);
+	}
+	
+	if (CurrentPlayer == 'player1') {
+		document.getElementById('user1').innerHTML = CurrentUser + " " + "[with O]";
+		document.getElementById('user2').innerHTML = OpponentUser + " " + "[with X]";
+	} else if (CurrentPlayer == 'player2') {
+		document.getElementById('user1').innerHTML = CurrentUser + " " + "[with X]";
+		document.getElementById('user2').innerHTML = OpponentUser + " " + "[with O]";
+	}
+	
 	CPlayer = 0; // Current Player (0 is O,1 is X)
 	l_played = [], l_win = [];
 	let imgp = document.getElementById("imgPlayer");
