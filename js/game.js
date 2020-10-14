@@ -110,7 +110,6 @@ function Click(id) {
 		let pgr = document.getElementById("pgrTime");
 		pgr.value = pgr.getAttribute("max");
 	}
-	console.log(CPlayer);
 
 	// Khoá lượt click của Player
 	if (CurrentPlayer == 'player1' && CPlayer == 1) {
