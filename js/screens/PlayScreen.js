@@ -193,13 +193,13 @@ class PlayScreen extends BaseComponent {
         this.$ranking = this._shadowRoot.querySelector(".btn-ranking");
         this.$back = this._shadowRoot.querySelector(".btn-back");
 
+
         this.$ranking.onclick = () => {
             var x = this._shadowRoot.querySelector('.play-screen');
             var y = this._shadowRoot.querySelector('.btn-back');
-            
+            y.style.display = 'block';
             if (x.style.display === 'none') {
                 x.style.display = 'block';
-                y.style.display = 'block';
             } else {
                 x.style.display = 'none';
             }
@@ -239,7 +239,9 @@ class PlayScreen extends BaseComponent {
         }
 
         this.$back.onclick = () => {
-            this._shadowRoot.querySelector('.play-screen').style.display = 'block'
+            this._shadowRoot.querySelector('.play-screen').style.display = 'block';
+            this._shadowRoot.querySelector('.btn-back').style.display = 'none';
+
         }
 
         //moi 5s: 
