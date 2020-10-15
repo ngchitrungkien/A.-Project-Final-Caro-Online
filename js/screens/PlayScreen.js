@@ -252,6 +252,7 @@ class PlayScreen extends BaseComponent {
                 await firebase.firestore().collection('ingame').add({
                     player1: queue.docs[0].data().email,
                     player2: queue.docs[1].data().email,
+                    InGame: false,
                 })
                 //neu 1 va 2 bi xoa thi ms tiep tuc interval
                 clearInterval(timer)
