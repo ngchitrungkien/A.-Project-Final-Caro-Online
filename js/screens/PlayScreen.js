@@ -293,7 +293,7 @@ class PlayScreen extends BaseComponent {
                     if (localStorage.getItem('Opponent') && localStorage.getItem('roomID')) {
                         console.log('found!');
                         setTimeout(() => {
-                            window.location.href = 'game.html'
+                            window.location.href = './game.html'
                         }, 4000);
                     }
 
