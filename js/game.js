@@ -78,7 +78,7 @@ function Loaded() {
 
 //Play Game
 
-let updateClick = db.collection('test').doc('test');
+let updateClick = db.collection('ingame').doc(iD);
 
 
 
@@ -111,20 +111,29 @@ function Click(id) {
 	let imgp = document.getElementById("imgPlayer");
 	imgp.style.backgroundImage = iplayer;
 
-
 	if (win) {
-		let mess = 'Player with "X" win';
-		if (pwin == 0) mess = 'Player with "O" win';
+		// let mess = 'Player with "X" win';
+		if (pwin == 1) {
+			scoreWithX();
+			mess = 'Player with "X" win, + 10 scores';
+		}
+		if (pwin == 0) {
+			scoreWithO();
+			mess = 'Player with "O" win, + 10 scores';
+		}
 		swal(mess);
 
 		// Hiển thị lại Button play
-		document.querySelector('.button').style.display = "block";
+		// document.querySelector('.button').style.display = "block";
 
 		InGame = false;
 	} else {
 		let pgr = document.getElementById("pgrTime");
 		pgr.value = pgr.getAttribute("max");
 	}
+
+
+
 
 	// Khoá lượt click của Player
 	if (CurrentPlayer == 'player1' && CPlayer == 1) {
@@ -134,10 +143,44 @@ function Click(id) {
 	} else document.getElementById('table').style.pointerEvents = 'auto';
 }
 
+//2 hàm cộng 10 điểm cho người thắng tương ứng là O hay X win.
+function scoreWithO() {
+	if (CurrentPlayer == 'player1') {
+		return async function update() {
+			let result = await db.collection('users').where('email', '==', CurrentUser).get();
+			for (let doc of result.docs) {
+				let scorePast = doc.data().score;
+				console.log(scorePast);
+				let scoreCurrent = scorePast + 10;
+				await db.collection('users').doc(doc.id).update({
+					score: scoreCurrent
+				});
+			}
+		}()
+	}
+}
+
+function scoreWithX() {
+	if (CurrentPlayer == 'player2') {
+		return async function update() {
+			let result = await db.collection('users').where('email', '==', CurrentUser).get();
+			for (let doc of result.docs) {
+				let scorePast = doc.data().score;
+				console.log(scorePast);
+				let scoreCurrent = scorePast + 10;
+				await db.collection('users').doc(doc.id).update({
+					score: scoreCurrent
+				});
+			}
+		}()
+	}
+}
+
 // Reload lại bàn cờ từ firebase
 
 async function reload() {
-	let result = await db.collection('test').doc('test').get()
+	let result = await db.collection('ingame').doc(iD)
+		.get()
 	let x = result.data().l_play;
 
 
@@ -146,11 +189,12 @@ async function reload() {
 	}
 }
 
-db.collection('test').doc('test').onSnapshot(
-	() => {
-		reload();
-	}
-)
+db.collection('ingame').doc(iD)
+	.onSnapshot(
+		() => {
+			reload();
+		}
+	)
 
 
 // Min Max
@@ -184,7 +228,6 @@ function GetBoard() {
 	var sqr = document.getElementsByClassName("square");
 	for (i = 0; i < size * size; i++)
 		TBoard.push(parseInt(sqr.item(i).getAttribute("player")));
-	// console.log(TBoard);
 
 	return TBoard;
 }
@@ -347,19 +390,19 @@ function winCross2(x, y, Board) {
 	return false;
 }
 
-// Button Event
+// Hàm khởi tạo New Game
 function PvsP() {
 	Loaded();
 	InGame = true;
 	let pgr = document.getElementById("pgrTime");
 	pgr.value = pgr.getAttribute("max");
-	document.querySelector('.button').style.display = "none";
+	// document.querySelector('.button').style.display = "none";
 	LoadProgress();
 
 }
 
 
-
+// Button Event
 function TimeReturn() {
 	let wait = document.getElementById("waitTime");
 	document.getElementById('waitTime').style.display = "none";
@@ -379,12 +422,18 @@ function LoadProgress() {
 			if (pgr.value > 0)
 				LoadProgress();
 			else {
-				let mess = 'Player with "X" win';
-				if (CPlayer == 1) mess = 'Player with "O" win';
+				if (CPlayer == 1) {
+					scoreWithX();
+					mess = 'Player with "X" win, + 10 scores';
+				}
+				if (CPlayer == 0) {
+					scoreWithO();
+					mess = 'Player with "O" win, + 10 scores';
+				}
 				swal(mess);
 
 				// Hiển thị lại Button play
-				document.querySelector('.button').style.display = "block";
+				// document.querySelector('.button').style.display = "block";
 
 				InGame = false;
 			}
