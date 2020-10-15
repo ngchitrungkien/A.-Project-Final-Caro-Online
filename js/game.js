@@ -122,7 +122,7 @@ function Click(id) {
 			mess = 'Player with "O" win, + 10 scores';
 		}
 		swal(mess).then(() => {
-			window.location.href = 'index.html';
+			window.location.href = 'index.html#!/play';
 		});
 
 		// Hiển thị lại Button play
@@ -434,7 +434,7 @@ function LoadProgress() {
 					mess = 'Player with "O" win, + 10 scores';
 				}
 				swal(mess).then(() => {
-					window.location.href = 'index.html';
+					window.location.href = 'index.html#!/play';
 				});
 
 				// Hiển thị lại Button play
