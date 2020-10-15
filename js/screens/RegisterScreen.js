@@ -162,7 +162,7 @@ class RegisterScreen extends BaseComponent {
                 // thêm 
                 if (response.empty) {
                     await firebase.firestore().collection('users').add(this.state.data);
-                    swal('Sign up successfully!');
+                    swal("Sign Up Successfully!", "Relax With Caro Zone 🐱‍🏍", "success");
                     router.navigate('/login');
                 } else {
                     swal('Your email has already been used!');
