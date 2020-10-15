@@ -1,7 +1,7 @@
 import {
     BaseComponent
 } from '../BaseComponent.js'
-import {getDataFromDocs} from './../utils.js'
+import { getDataFromDocs } from './../utils.js'
 
 const style = /* html */ `
 <style>
@@ -124,27 +124,38 @@ const style = /* html */ `
 `;
 
 class PlayScreen extends BaseComponent {
-        constructor(props){
-            super();
-            this.state = {
-                rank:[]
-            }
+    constructor(props) {
+        super();
+        this.state = {
+            rank: []
         }
+    }
     render() {
 
         let topRanking = this.state.rank;
         let rank = '' // lưu html của rank vào đây
         //  lấy dữ liệu từ firebase đổ vào rank
-         for(let i=0; i< topRanking.length;i++){
-             rank+= `
+        for (let i = 0; i < topRanking.length; i++) {
+            rank += `
              <tr>
-                <td class="rank">${i+1}</td>
+                <td class="rank">${i + 1}</td>
                 <td class="name">${topRanking[i].name}</td>
                 <td class="score">${topRanking[i].score}</td>
             </tr> `
         }
 
+        // Lay thong tin player tu fb
+        let CurrentUser = JSON.parse(localStorage.getItem('Current-Player')).email;
         let currentPlayer = JSON.parse(localStorage.getItem('Current-Player'));
+        (async () => {
+            let response = await firebase.firestore()
+                .collection('users')
+                .where('email', '==', CurrentUser)
+                .get();
+            currentPlayer = (response.docs[0].data())
+            localStorage.setItem('Current-Player', JSON.stringify(currentPlayer))
+        })()
+
         this._shadowRoot.innerHTML = /* html */ `
         ${style}
         
@@ -257,7 +268,7 @@ class PlayScreen extends BaseComponent {
                 //neu 1 va 2 bi xoa thi ms tiep tuc interval
                 clearInterval(timer)
             }
-            
+
         }, 10000);
 
 
@@ -276,39 +287,39 @@ class PlayScreen extends BaseComponent {
                     }
                     setTimeout(async () => {
                         await firebase.firestore().collection('queue').doc(currentPlayer.email).delete();
-                        
+
                     }, 2000);
 
-                    if(localStorage.getItem('Opponent') && localStorage.getItem('roomID')){
+                    if (localStorage.getItem('Opponent') && localStorage.getItem('roomID')) {
                         console.log('found!');
                         setTimeout(() => {
                             window.location.href = 'game.html'
                         }, 4000);
                     }
-                    
-                    
+
+
                 }
                 console.log('found')
-               
-                
+
+
 
             }
         )
-    
-        
+
+
 
     }
 
-    componentDidMount(){
+    componentDidMount() {
         //  khởi tạo dữ liệu cho state: rank
-            firebase.firestore().collection('users').onSnapshot( async (snap)=>{
-               let score1= await firebase.firestore().collection('users').orderBy('score','desc').limit(10).get();
-                this.setState({
-                    //  setState cho rank là 10 người chơi có điểm cao nhất
-                    rank: getDataFromDocs(score1.docs)
-                })
-            }) 
-                
+        firebase.firestore().collection('users').onSnapshot(async (snap) => {
+            let score1 = await firebase.firestore().collection('users').orderBy('score', 'desc').limit(10).get();
+            this.setState({
+                //  setState cho rank là 10 người chơi có điểm cao nhất
+                rank: getDataFromDocs(score1.docs)
+            })
+        })
+
     }
 
 
