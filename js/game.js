@@ -42,7 +42,7 @@ function Loaded() {
 		document.getElementById('img1').style.backgroundImage = "url('img/Opng.png')";
 		document.getElementById('user2').innerHTML = OpponentUser;
 		document.getElementById('img2').style.backgroundImage = "url('img/Xpng.png')";
-		
+
 	} else if (CurrentPlayer == 'player2') {
 		document.getElementById('user1').innerHTML = CurrentUser;
 		document.getElementById('img1').style.backgroundImage = "url('img/Xpng.png')";
@@ -120,10 +120,12 @@ function Click(id) {
 		// let mess = 'Player with "X" win';
 		if (pwin == 1) {
 			scoreWithX();
+			delData();
 			mess = 'Player with "X" win, + 10 scores';
 		}
 		if (pwin == 0) {
 			scoreWithO();
+			delData();
 			mess = 'Player with "O" win, + 10 scores';
 		}
 		swal(mess).then(() => {
@@ -157,7 +159,6 @@ function scoreWithO() {
 			let result = await db.collection('users').where('email', '==', CurrentUser).get();
 			for (let doc of result.docs) {
 				let scorePast = doc.data().score;
-				console.log(scorePast);
 				let scoreCurrent = scorePast + 10;
 				await db.collection('users').doc(doc.id).update({
 					score: scoreCurrent
@@ -173,7 +174,6 @@ function scoreWithX() {
 			let result = await db.collection('users').where('email', '==', CurrentUser).get();
 			for (let doc of result.docs) {
 				let scorePast = doc.data().score;
-				console.log(scorePast);
 				let scoreCurrent = scorePast + 10;
 				await db.collection('users').doc(doc.id).update({
 					score: scoreCurrent
@@ -182,6 +182,23 @@ function scoreWithX() {
 		}()
 	}
 }
+
+// Hàm xoá room của 2 player trong collection 'ingame' để chuẩn bị cho tìm kiếm game mới
+function delData() {
+	return async function del() {
+		let result1 = await db.collection('ingame').where('player1', '==', CurrentUser).get();
+		let result2 = await db.collection('ingame').where('player2', '==', CurrentUser).get();
+
+		console.log(CurrentUser);
+		for (let doc of result1.docs) {
+			await db.collection('ingame').doc(doc.id).delete();
+		}
+		for (let doc of result2.docs) {
+			await db.collection('ingame').doc(doc.id).delete();
+		}
+	}()
+}
+
 
 // Reload lại bàn cờ từ firebase
 
@@ -431,12 +448,14 @@ function LoadProgress() {
 				LoadProgress();
 			else {
 				if (CPlayer == 1) {
-					scoreWithX();
-					mess = 'Player with "X" win, + 10 scores';
+					scoreWithO();
+					delData();
+					mess = 'Player with "O" win, + 10 scores';
 				}
 				if (CPlayer == 0) {
-					scoreWithO();
-					mess = 'Player with "O" win, + 10 scores';
+					scoreWithX();
+					delData();
+					mess = 'Player with "X" win, + 10 scores';
 				}
 				swal(mess).then(() => {
 					window.location.href = 'index.html#!/play';
