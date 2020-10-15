@@ -207,9 +207,15 @@ async function reload() {
 		.get()
 	let x = result.data().l_play;
 
-
 	for (let item of x) {
 		Click(item);
+	}
+
+	let waitCheck =  result.data().waitCheck;
+	if(waitCheck = true){
+		TimeReturn()
+	} else {
+		//do nothing!!!
 	}
 }
 
@@ -428,7 +434,10 @@ function PvsP() {
 PvsP();
 
 // Button Event
-function TimeReturn() {
+async function TimeReturn() {
+	await db.collection('ingame').doc(iD).update({
+		waitCheck: true
+	});
 	let wait = document.getElementById("waitTime");
 	document.getElementById('waitTime').style.display = "none";
 	if (l_played.length > 0)
@@ -451,8 +460,7 @@ function LoadProgress() {
 					scoreWithO();
 					delData();
 					mess = 'Player with "O" win, + 10 scores';
-				}
-				if (CPlayer == 0) {
+				} else if (CPlayer == 0) {
 					scoreWithX();
 					delData();
 					mess = 'Player with "X" win, + 10 scores';
