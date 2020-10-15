@@ -33,10 +33,9 @@ img {
 
 
 
-.user {
+/* .user {
 	background: #ccc;
-	width: 166px;
-	height: 166px;
+	
 	margin-bottom: 150px;
 	margin-left: 80px;
 	border: 1px solid #001427;
@@ -45,7 +44,7 @@ img {
 	color: #001427;
 	text-align: center;
 	line-height: 83px;
-}
+} */
 
 #divcontrol
 {
@@ -53,7 +52,7 @@ img {
 	height:220px;
 	float:right;
 	background-color:#FFF;
-	margin-right:100px;
+	margin-right:80px;
 	opacity:0.7;
 	overflow:hidden;
 	border: 1px solid #001427;
@@ -144,4 +143,35 @@ img {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.user-container {
+	width:166px;
+	height:166px;
+	margin-bottom: 150px;
+	margin-left: 80px;
+	float:right;
+	background-color:#ccc;
+	opacity:0.8;
+	overflow:hidden;
+	border: 1px solid #001427;
+	border-radius:10px;
+	color: #001427;
+	
+}
+
+.user {
+	margin-top: 30px;
+	text-align: center;
+	font-size: 15px;
+}
+
+#img1, #img2 {
+	width:60px;
+	height:60px;
+	margin:auto;
+	margin-top:20px;
+	background-repeat:round;
+	background-color: none;
+
 }

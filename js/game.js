@@ -38,11 +38,16 @@ function Loaded() {
 
 	//Load dữ liệu User
 	if (CurrentPlayer == 'player1') {
-		document.getElementById('user1').innerHTML = CurrentUser + " " + "[with O]";
-		document.getElementById('user2').innerHTML = OpponentUser + " " + "[with X]";
+		document.getElementById('user1').innerHTML = CurrentUser;
+		document.getElementById('img1').style.backgroundImage = "url('img/Opng.png')";
+		document.getElementById('user2').innerHTML = OpponentUser;
+		document.getElementById('img2').style.backgroundImage = "url('img/Xpng.png')";
+		
 	} else if (CurrentPlayer == 'player2') {
-		document.getElementById('user1').innerHTML = CurrentUser + " " + "[with X]";
-		document.getElementById('user2').innerHTML = OpponentUser + " " + "[with O]";
+		document.getElementById('user1').innerHTML = CurrentUser;
+		document.getElementById('img1').style.backgroundImage = "url('img/Xpng.png')";
+		document.getElementById('img2').style.backgroundImage = "url('img/Opng.png')";
+		document.getElementById('user2').innerHTML = OpponentUser;
 	}
 
 	CPlayer = 0; // Current Player (0 is O,1 is X)
