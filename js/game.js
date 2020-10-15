@@ -121,7 +121,9 @@ function Click(id) {
 			scoreWithO();
 			mess = 'Player with "O" win, + 10 scores';
 		}
-		swal(mess);
+		swal(mess).then(() => {
+			window.location.href = 'index.html';
+		});
 
 		// Hiển thị lại Button play
 		// document.querySelector('.button').style.display = "block";
@@ -401,6 +403,7 @@ function PvsP() {
 
 }
 
+PvsP();
 
 // Button Event
 function TimeReturn() {
@@ -430,7 +433,9 @@ function LoadProgress() {
 					scoreWithO();
 					mess = 'Player with "O" win, + 10 scores';
 				}
-				swal(mess);
+				swal(mess).then(() => {
+					window.location.href = 'index.html';
+				});
 
 				// Hiển thị lại Button play
 				// document.querySelector('.button').style.display = "block";
@@ -439,3 +444,4 @@ function LoadProgress() {
 			}
 		}, 100);
 }
+
