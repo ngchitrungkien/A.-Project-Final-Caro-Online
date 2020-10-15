@@ -39,21 +39,21 @@ function Loaded() {
 	//Load dữ liệu User
 	if (CurrentPlayer == 'player1') {
 		document.getElementById('user1').innerHTML = CurrentUser;
-		document.getElementById('img1').style.backgroundImage = "url('img/Opng.png')";
+		document.getElementById('img1').style.backgroundImage = "url('./img/Opng.png')";
 		document.getElementById('user2').innerHTML = OpponentUser;
-		document.getElementById('img2').style.backgroundImage = "url('img/Xpng.png')";
+		document.getElementById('img2').style.backgroundImage = "url('./img/Xpng.png')";
 
 	} else if (CurrentPlayer == 'player2') {
 		document.getElementById('user1').innerHTML = CurrentUser;
-		document.getElementById('img1').style.backgroundImage = "url('img/Xpng.png')";
-		document.getElementById('img2').style.backgroundImage = "url('img/Opng.png')";
+		document.getElementById('img1').style.backgroundImage = "url('./img/Xpng.png')";
+		document.getElementById('img2').style.backgroundImage = "url('./img/Opng.png')";
 		document.getElementById('user2').innerHTML = OpponentUser;
 	}
 
 	CPlayer = 0; // Current Player (0 is O,1 is X)
 	l_played = [], l_win = [];
 	let imgp = document.getElementById("imgPlayer");
-	imgp.style.backgroundImage = "url('img/Opng.png')";
+	imgp.style.backgroundImage = "url('./img/Opng.png')";
 
 
 	let table = document.getElementById("table");
@@ -92,8 +92,8 @@ function Click(id) {
 	let square = document.getElementsByClassName("square");
 	let pos = parseInt(id);
 	if (square.item(pos).getAttribute("player") != "-1") return;
-	let path = "url('img/Opng.png')";
-	if (CPlayer == 1) path = "url('img/Xpng.png')";
+	let path = "url('./img/Opng.png')";
+	if (CPlayer == 1) path = "url('./img/Xpng.png')";
 	square.item(pos).style.backgroundImage = path;
 	square.item(pos).setAttribute("player", CPlayer.toString());
 	l_played.push(pos);
@@ -111,8 +111,8 @@ function Click(id) {
 	else CPlayer = 0;
 
 
-	let iplayer = "url('img/Opng.png')";
-	if (CPlayer == 1) iplayer = "url('img/Xpng.png')";
+	let iplayer = "url('./img/Opng.png')";
+	if (CPlayer == 1) iplayer = "url('./img/Xpng.png')";
 	let imgp = document.getElementById("imgPlayer");
 	imgp.style.backgroundImage = iplayer;
 
@@ -129,7 +129,7 @@ function Click(id) {
 			mess = 'Player with "O" win, + 10 scores';
 		}
 		swal(mess).then(() => {
-			window.location.href = 'index.html#!/play';
+			window.location.href = './index.html#!/play';
 		});
 
 		// Hiển thị lại Button play
@@ -466,7 +466,7 @@ function LoadProgress() {
 					mess = 'Player with "X" win, + 10 scores';
 				}
 				swal(mess).then(() => {
-					window.location.href = 'index.html#!/play';
+					window.location.href = './index.html#!/play';
 				});
 
 				// Hiển thị lại Button play
